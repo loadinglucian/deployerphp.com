@@ -17,7 +17,7 @@
         <div x-data="{ mobileMenuOpen: false }">
             {{-- Fixed Header --}}
             <header class="fixed inset-x-0 top-0 z-50 bg-linear-to-b from-white to-[#F8F8FC] backdrop-blur supports-backdrop-filter:from-white/80 supports-backdrop-filter:to-[#F8F8FC]/80 dark:from-synth-dark-surface dark:to-[#080811] dark:supports-backdrop-filter:from-synth-dark-surface/80 dark:supports-backdrop-filter:to-[#080811]/80">
-                <div class="mx-auto flex max-w-screen-2xl items-center justify-between gap-4 p-4 sm:p-6">
+                <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 p-4 sm:p-6">
                     {{-- Left: Hamburger (mobile) + Logo --}}
                     <div class="flex flex-1 items-center gap-4">
                         {{-- Hamburger Menu Button (mobile only) --}}
@@ -79,7 +79,7 @@
             </aside>
 
             {{-- Main Layout --}}
-            <div class="mx-auto max-w-screen-2xl pt-14">
+            <div class="mx-auto max-w-7xl pt-14">
                 <div class="lg:flex">
                     {{-- Left Sidebar: Table of Contents (desktop) --}}
                     <aside class="hidden lg:block lg:w-64 lg:shrink-0 xl:w-72">
