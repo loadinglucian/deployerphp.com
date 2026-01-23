@@ -11,26 +11,19 @@
 
         <div x-data="{ open: {{ $sectionContainsActive ? 'true' : 'false' }} }">
             {{-- Clickable section header --}}
-            <button @click="open = !open" class="flex w-full items-center justify-between rounded-md px-3 py-2 text-left text-sm font-semibold text-synth-text transition-colors hover:bg-synth-bg-alt dark:text-synth-text-light dark:hover:bg-synth-dark-alt">
+            <button @click="open = !open" class="flex w-full cursor-pointer items-center justify-between px-1 py-2 text-left text-sm font-semibold text-synth-text transition-colors dark:text-synth-text-light">
                 <span>{{ $section['name'] }}</span>
-                {{-- Chevron indicator --}}
-                <svg :class="{ 'rotate-90': open }" class="size-4 text-synth-text-muted transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
             </button>
 
             {{-- Collapsible links list --}}
-            <ul x-show="open" x-collapse class="mt-1 space-y-1">
+            <ul x-show="open" x-collapse class="mt-1 ml-1.5">
                 @foreach ($section['links'] as $link)
                     @php
                         $isActive = $link['path'] === $currentPath;
                     @endphp
 
                     <li>
-                        <a
-                            href="{{ route('docs.show', ['section' => explode('/', $link['path'])[0], 'page' => explode('/', $link['path'])[1]]) }}"
-                            @class(['block rounded-md px-3 py-1.5 text-sm transition-colors', 'bg-neon-cyan/10 font-medium text-neon-cyan-dark dark:bg-neon-cyan/15 dark:text-neon-cyan' => $isActive, 'text-synth-text-muted hover:bg-synth-bg-alt hover:text-neon-cyan dark:text-synth-text-light-muted dark:hover:bg-synth-dark-alt dark:hover:text-neon-cyan' => ! $isActive])
-                        >
+                        <a href="{{ route('docs.show', ['section' => explode('/', $link['path'])[0], 'page' => explode('/', $link['path'])[1]]) }}" @class(['block px-3 py-1.5 text-sm transition-colors', 'border-l border-neon-cyan-dark ' => $isActive, 'border-l border-synth-border text-synth-text-muted hover:bg-synth-bg-alt dark:text-synth-text-light-muted dark:hover:bg-synth-dark-alt dark:hover:text-neon-cyan' => ! $isActive])>
                             {{ $link['title'] }}
                         </a>
                     </li>
