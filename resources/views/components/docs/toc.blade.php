@@ -11,10 +11,10 @@
 
         <div x-data="{ open: {{ $sectionContainsActive ? 'true' : 'false' }} }">
             {{-- Clickable section header --}}
-            <button @click="open = !open" class="flex w-full items-center justify-between rounded-md px-3 py-2 text-left text-sm font-semibold text-slate-900 transition-colors hover:bg-slate-50 dark:text-white dark:hover:bg-slate-800">
+            <button @click="open = !open" class="flex w-full items-center justify-between rounded-md px-3 py-2 text-left text-sm font-semibold text-synth-text transition-colors hover:bg-synth-bg-alt dark:text-synth-text-light dark:hover:bg-synth-dark-alt">
                 <span>{{ $section['name'] }}</span>
                 {{-- Chevron indicator --}}
-                <svg :class="{ 'rotate-90': open }" class="size-4 text-slate-400 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <svg :class="{ 'rotate-90': open }" class="size-4 text-synth-text-muted transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
                 </svg>
             </button>
@@ -29,7 +29,7 @@
                     <li>
                         <a
                             href="{{ route('docs.show', ['section' => explode('/', $link['path'])[0], 'page' => explode('/', $link['path'])[1]]) }}"
-                            @class(['block rounded-md px-3 py-1.5 text-sm transition-colors', 'bg-slate-100 font-medium text-slate-900 dark:bg-slate-800 dark:text-white' => $isActive, 'text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white' => ! $isActive])
+                            @class(['block rounded-md px-3 py-1.5 text-sm transition-colors', 'bg-neon-cyan/10 font-medium text-neon-cyan-dark dark:bg-neon-cyan/15 dark:text-neon-cyan' => $isActive, 'text-synth-text-muted hover:bg-synth-bg-alt hover:text-neon-cyan dark:text-synth-text-light-muted dark:hover:bg-synth-dark-alt dark:hover:text-neon-cyan' => ! $isActive])
                         >
                             {{ $link['title'] }}
                         </a>
