@@ -9,17 +9,19 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>DeployerPHP {{ $title ?? 'Documentation' }}</title>
+        <link rel="preconnect" href="https://fonts.bunny.net" />
+        <link href="https://fonts.bunny.net/css?family=inter:400,500,600&display=swap" rel="stylesheet" />
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="min-h-screen bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100">
+    <body class="min-h-screen bg-synth-bg text-synth-text dark:bg-synth-dark dark:text-synth-text-light">
         <div x-data="{ mobileMenuOpen: false }">
             {{-- Fixed Header --}}
-            <header class="fixed inset-x-0 top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur supports-backdrop-filter:bg-white/80 dark:border-slate-700 dark:bg-slate-900/95 dark:supports-backdrop-filter:bg-slate-900/80">
-                <div class="mx-auto flex h-14 max-w-screen-2xl items-center justify-between gap-4 px-4 sm:px-6">
+            <header class="fixed inset-x-0 top-0 z-50 bg-linear-to-b from-white to-[#F8F8FC] backdrop-blur supports-backdrop-filter:from-white/80 supports-backdrop-filter:to-[#F8F8FC]/80 dark:from-synth-dark-surface dark:to-[#080811] dark:supports-backdrop-filter:from-synth-dark-surface/80 dark:supports-backdrop-filter:to-[#080811]/80">
+                <div class="mx-auto flex max-w-screen-2xl items-center justify-between gap-4 p-4 sm:p-6">
                     {{-- Left: Hamburger (mobile) + Logo --}}
-                    <div class="flex items-center gap-4">
+                    <div class="flex flex-1 items-center gap-4">
                         {{-- Hamburger Menu Button (mobile only) --}}
-                        <button type="button" class="-ml-2 flex h-10 w-10 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-700 lg:hidden dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200" @click="mobileMenuOpen = !mobileMenuOpen" :aria-expanded="mobileMenuOpen" aria-label="Toggle navigation menu">
+                        <button type="button" class="-ml-2 flex h-10 w-10 items-center justify-center rounded-lg text-synth-text-muted hover:bg-synth-bg-alt hover:text-neon-cyan lg:hidden dark:text-synth-text-light-muted dark:hover:bg-synth-dark-alt dark:hover:text-neon-cyan" @click="mobileMenuOpen = !mobileMenuOpen" :aria-expanded="mobileMenuOpen" aria-label="Toggle navigation menu">
                             <svg x-show="!mobileMenuOpen" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                             </svg>
@@ -29,20 +31,20 @@
                         </button>
 
                         {{-- Logo --}}
-                        <a href="{{ route('docs.index') }}" class="flex items-center gap-2 font-mono">
+                        <a href="{{ route('docs.index') }}" class="flex flex-1 items-center gap-2 font-mono">
                             <span class="text-lg font-bold text-cyan-500">DeployerPHP</span>
-                            <span class="hidden text-xs tracking-tight sm:flex">
-                                <span class="text-cyan-500">━━</span>
-                                <span class="text-blue-400">━━</span>
-                                <span class="text-fuchsia-500">━━</span>
-                                <span class="text-slate-400 dark:text-slate-500">━━</span>
+                            <span class="flex flex-1 text-xs tracking-tight">
+                                <span class="h-[2px] flex-1 overflow-hidden bg-cyan-500"></span>
+                                <span class="h-[2px] flex-1 overflow-hidden bg-blue-400"></span>
+                                <span class="h-[2px] flex-1 overflow-hidden bg-fuchsia-500"></span>
+                                <span class="h-[2px] flex-1 overflow-hidden bg-slate-400 dark:text-slate-500"></span>
                             </span>
                         </a>
                     </div>
 
                     {{-- Right: Dark Mode Toggle --}}
                     <div class="flex items-center gap-2">
-                        <button type="button" class="flex h-10 w-10 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200" @click="darkMode = !darkMode" :aria-label="darkMode ? 'Switch to light mode' : 'Switch to dark mode'">
+                        <button type="button" class="flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg text-synth-text-muted hover:bg-synth-bg-alt hover:text-neon-cyan dark:text-synth-text-light-muted dark:hover:bg-synth-dark-alt dark:hover:text-neon-cyan" @click="darkMode = !darkMode" :aria-label="darkMode ? 'Switch to light mode' : 'Switch to dark mode'">
                             {{-- Sun icon (shown in dark mode) --}}
                             <svg x-show="darkMode" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
@@ -57,7 +59,7 @@
             </header>
 
             {{-- Mobile Sidebar Overlay --}}
-            <div x-show="mobileMenuOpen" x-transition:enter="transition-opacity duration-300 ease-out" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition-opacity duration-200 ease-in" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 z-40 bg-slate-900/50 lg:hidden" @click="mobileMenuOpen = false" x-cloak></div>
+            <div x-show="mobileMenuOpen" x-transition:enter="transition-opacity duration-300 ease-out" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition-opacity duration-200 ease-in" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 z-40 bg-synth-dark/50 lg:hidden" @click="mobileMenuOpen = false" x-cloak></div>
 
             {{-- Mobile Sidebar --}}
             <aside
@@ -68,7 +70,7 @@
                 x-transition:leave="transition-transform duration-200 ease-in"
                 x-transition:leave-start="translate-x-0"
                 x-transition:leave-end="-translate-x-full"
-                class="fixed inset-y-0 left-0 z-50 w-72 overflow-y-auto border-r border-slate-200 bg-white px-6 pt-20 pb-6 lg:hidden dark:border-slate-700 dark:bg-slate-900"
+                class="fixed inset-y-0 left-0 z-50 w-72 overflow-y-auto border-r border-synth-border bg-synth-surface px-6 pt-20 pb-6 lg:hidden dark:border-synth-border-dark dark:bg-synth-dark"
                 @click.away="mobileMenuOpen = false"
                 @keydown.escape.window="mobileMenuOpen = false"
                 x-cloak
