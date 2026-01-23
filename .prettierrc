@@ -1,0 +1,34 @@
+{
+  "plugins": ["prettier-plugin-blade", "prettier-plugin-tailwindcss"],
+  "tailwindConfig": "./tailwind.config.js",
+  "tailwindStylesheet": "./resources/css/app.css",
+  "tabWidth": 4,
+  "useTabs": false,
+  "endOfLine": "lf",
+  "insertFinalNewline": true,
+  "singleQuote": true,
+  "printWidth": 480,
+  "overrides": [
+    {
+      "files": ["*.blade.php"],
+      "options": {
+        "parser": "blade",
+        "wrapAttributes": "auto",
+        "sortTailwindcssClasses": true,
+        "sortHtmlAttributes": "alphabetical"
+      }
+    },
+    {
+      "files": ["*.yml", "*.yaml", ".prettierrc"],
+      "options": {
+        "tabWidth": 2
+      }
+    },
+    {
+      "files": ["*.md"],
+      "options": {
+        "proseWrap": "preserve"
+      }
+    }
+  ]
+}

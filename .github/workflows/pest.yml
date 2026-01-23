@@ -1,0 +1,38 @@
+name: Pest
+
+permissions:
+  contents: read
+
+on:
+  pull_request:
+
+jobs:
+  pest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP and Composer
+        uses: ./.github/actions/setup-php-composer
+        with:
+          coverage: "true"
+          flux-username: ${{ secrets.FLUX_USERNAME }}
+          flux-license-key: ${{ secrets.FLUX_LICENSE_KEY }}
+
+      - name: Setup Bun
+        uses: ./.github/actions/setup-bun
+
+      - name: Build frontend
+        run: bun run build
+
+      - name: Generate APP_KEY
+        run: php artisan key:generate --env=testing --force
+
+      - name: Execute tests with coverage
+        run: vendor/bin/pest --parallel --coverage --coverage-text

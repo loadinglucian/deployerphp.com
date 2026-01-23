@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
 |--------------------------------------------------------------------------
 | Test Case
@@ -11,9 +13,18 @@
 |
 */
 
+// Architecture Tests: Architecture rules and best practices
 pest()->extend(Tests\TestCase::class)
- // ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
+    ->in('Arch');
+
+// Feature Tests: Full HTTP stack end-to-end tests
+pest()->extend(Tests\FeatureTestCase::class)
+    ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
     ->in('Feature');
+
+// Unit Tests: Pure business logic, mocked dependencies, no database
+pest()->extend(Tests\TestCase::class)
+    ->in('Unit');
 
 /*
 |--------------------------------------------------------------------------
@@ -26,9 +37,7 @@ pest()->extend(Tests\TestCase::class)
 |
 */
 
-expect()->extend('toBeOne', function () {
-    return $this->toBe(1);
-});
+expect()->extend('toBeOne', fn () => $this->toBe(1));
 
 /*
 |--------------------------------------------------------------------------

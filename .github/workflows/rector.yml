@@ -1,0 +1,38 @@
+name: Rector
+
+permissions:
+  contents: read
+
+on:
+  pull_request:
+
+jobs:
+  rector:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP and Composer
+        uses: ./.github/actions/setup-php-composer
+        with:
+          flux-username: ${{ secrets.FLUX_USERNAME }}
+          flux-license-key: ${{ secrets.FLUX_LICENSE_KEY }}
+
+      - run: mkdir -p /tmp/rector
+
+      - name: Cache Rector tmp dir
+        uses: actions/cache@v4
+        with:
+          path: /tmp/rector
+          key: ${{ runner.os }}-rector-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-rector-
+
+      - name: Check code style
+        run: vendor/bin/rector --dry-run

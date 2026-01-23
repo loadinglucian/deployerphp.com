@@ -1,0 +1,28 @@
+name: Phpstan
+
+permissions:
+  contents: read
+
+on:
+  pull_request:
+
+jobs:
+  phpstan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP and Composer
+        uses: ./.github/actions/setup-php-composer
+        with:
+          flux-username: ${{ secrets.FLUX_USERNAME }}
+          flux-license-key: ${{ secrets.FLUX_LICENSE_KEY }}
+
+      - name: Execute Static Analysis
+        run: vendor/bin/phpstan analyse --error-format=github

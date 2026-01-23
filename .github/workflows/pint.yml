@@ -1,0 +1,28 @@
+name: Pint
+
+permissions:
+  contents: read
+
+on:
+  pull_request:
+
+jobs:
+  pint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP and Composer
+        uses: ./.github/actions/setup-php-composer
+        with:
+          flux-username: ${{ secrets.FLUX_USERNAME }}
+          flux-license-key: ${{ secrets.FLUX_LICENSE_KEY }}
+
+      - name: Check code style
+        run: vendor/bin/pint --test --parallel
