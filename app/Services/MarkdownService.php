@@ -38,14 +38,34 @@ final readonly class MarkdownService
     }
 
     /**
-     * Convert markdown to HTML with GitHub-style alert boxes and code block wrappers.
+     * Convert markdown to HTML with GitHub-style alert boxes, code block wrappers, and link transformation.
      */
-    public function toHtml(string $markdown): string
+    public function toHtml(string $markdown, ?string $currentSection = null): string
     {
         $html = $this->converter->convert($markdown)->getContent();
+        $html = $this->stripContentBeforeH1($html);
         $html = $this->convertGitHubAlerts($html);
+        $html = $this->wrapCodeBlocks($html);
 
-        return $this->wrapCodeBlocks($html);
+        return $this->transformLinks($html, $currentSection);
+    }
+
+    /**
+     * Remove any content that appears before the first H1 heading.
+     */
+    private function stripContentBeforeH1(string $html): string
+    {
+        $position = stripos($html, '<h1');
+
+        if ($position === false) {
+            return $html;
+        }
+
+        if ($position === 0) {
+            return $html;
+        }
+
+        return substr($html, $position);
     }
 
     /**
@@ -99,5 +119,138 @@ final readonly class MarkdownService
             },
             $html
         ) ?? $html;
+    }
+
+    /**
+     * Transform relative links to GitHub blob URLs.
+     *
+     * Converts links like `section/file.md` or `/docs/section/page` to full
+     * GitHub URLs pointing to the source repository.
+     */
+    private function transformLinks(string $html, ?string $currentSection): string
+    {
+        return preg_replace_callback(
+            '/<a\s+href="([^"]+)"([^>]*)>/i',
+            fn (array $matches): string => $this->transformLink($matches, $currentSection),
+            $html
+        ) ?? $html;
+    }
+
+    /**
+     * Transform a single link based on its type.
+     *
+     * - Docs links → internal site routes (same tab)
+     * - Non-docs links → GitHub URLs (new tab)
+     *
+     * @param  array<int, string>  $matches
+     */
+    private function transformLink(array $matches, ?string $currentSection): string
+    {
+        $href = $matches[1];
+        $attributes = $matches[2];
+
+        // Skip external links and anchor-only links
+        if (preg_match('#^https?://#i', $href) === 1 || str_starts_with($href, '#')) {
+            return $matches[0];
+        }
+
+        // Docs links (prefixed with /docs/ or docs/) → internal site route
+        if ($this->isDocsLink($href)) {
+            $internalUrl = $this->resolveInternalDocsUrl($href);
+
+            return sprintf('<a href="%s"%s>', $internalUrl, $attributes);
+        }
+
+        // All other links → GitHub with target="_blank"
+        $githubUrl = $this->resolveGitHubUrl($href, $currentSection);
+
+        return sprintf(
+            '<a href="%s" target="_blank" rel="noopener noreferrer"%s>',
+            $githubUrl,
+            $attributes
+        );
+    }
+
+    /**
+     * Determine if a link points to a docs page by path prefix.
+     */
+    private function isDocsLink(string $href): bool
+    {
+        $pathWithoutFragment = explode('#', $href, 2)[0];
+
+        return str_starts_with($pathWithoutFragment, '/docs/')
+            || str_starts_with($pathWithoutFragment, 'docs/');
+    }
+
+    /**
+     * Convert a docs link to an internal site route.
+     */
+    private function resolveInternalDocsUrl(string $href): string
+    {
+        // Preserve fragment
+        $fragment = '';
+        if (str_contains($href, '#')) {
+            [$href, $fragment] = explode('#', $href, 2);
+            $fragment = '#'.$fragment;
+        }
+
+        // Remove .md extension if present
+        if (str_ends_with($href, '.md')) {
+            $href = substr($href, 0, -3);
+        }
+
+        // Normalize: ensure leading slash if missing
+        if (str_starts_with($href, 'docs/')) {
+            $href = '/'.$href;
+        }
+
+        return "{$href}{$fragment}";
+    }
+
+    /**
+     * Resolve a relative link to a full GitHub blob URL.
+     */
+    private function resolveGitHubUrl(string $href, ?string $currentSection): string
+    {
+        /** @var string $repo */
+        $repo = config('docs.github.repo');
+        /** @var string $branch */
+        $branch = config('docs.github.branch');
+        /** @var string $docsDir */
+        $docsDir = config('docs.github.dir');
+
+        $baseUrl = "https://github.com/{$repo}/blob/{$branch}";
+
+        // Preserve fragment
+        $fragment = '';
+        if (str_contains($href, '#')) {
+            [$href, $fragment] = explode('#', $href, 2);
+            $fragment = '#'.$fragment;
+        }
+
+        // Handle root-relative paths (e.g., /CONTRIBUTING, /src/Command.php)
+        // These point to the repo root, not the docs directory
+        if (str_starts_with($href, '/')) {
+            $path = substr($href, 1); // Remove leading slash
+
+            return "{$baseUrl}/{$path}{$fragment}";
+        }
+
+        // Handle relative .md links (already have extension)
+        if (str_ends_with($href, '.md')) {
+            // If path doesn't start with section, prepend current section
+            if ($currentSection !== null && ! str_contains($href, '/')) {
+                return "{$baseUrl}/{$docsDir}/{$currentSection}/{$href}{$fragment}";
+            }
+
+            return "{$baseUrl}/{$docsDir}/{$href}{$fragment}";
+        }
+
+        // Other relative paths - add .md extension
+        if ($currentSection !== null && ! str_contains($href, '/')) {
+            return "{$baseUrl}/{$docsDir}/{$currentSection}/{$href}.md{$fragment}";
+        }
+
+        return "{$baseUrl}/{$docsDir}/{$href}.md{$fragment}";
     }
 }
