@@ -37,6 +37,22 @@
 
     --spacing-54: 13.5rem; /* 216px - left sidebar content width */
     --spacing-70: 17.5rem; /* 280px - right sidebar column width */
+
+    /* ----
+     * Docs Sticky Layout
+     * Sidebar initial position = container padding + grid padding
+     * ---- */
+
+    --docs-container-padding: 1rem; /* Matches p-4 (mobile default) */
+    --docs-grid-padding-top: 5rem; /* Matches py-20 (80px) */
+    --docs-sticky-top: calc(var(--docs-container-padding) + var(--docs-grid-padding-top));
+}
+
+/* Desktop: container padding increases to p-6 (1.5rem) */
+@media (min-width: 640px) {
+    :root {
+        --docs-container-padding: 1.5rem;
+    }
 }
 
 /* ----
@@ -248,4 +264,3 @@
 .dark .prose :where(a):hover {
     color: #38bdf8; /* sky-400 */
 }
-

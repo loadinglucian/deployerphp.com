@@ -99,8 +99,8 @@
             <div class="mx-auto max-w-7xl p-4 sm:p-6">
                 <div class="py-20 lg:grid lg:grid-cols-[280px_1fr_280px]">
                     {{-- Left Sidebar: Table of Contents (desktop) --}}
-                    <aside class="hidden lg:block">
-                        <div class="sticky top-24 h-[calc(100vh-8rem)] w-54 overflow-y-auto pr-16">
+                    <aside class="hidden self-stretch lg:block">
+                        <div class="sticky max-h-[calc(100vh-var(--docs-sticky-top)-2rem)] w-54 overflow-y-auto pr-16" style="top: var(--docs-sticky-top)">
                             {{-- See toc.blade.php --}}
                             {{ $sidebar }}
                         </div>
@@ -113,8 +113,8 @@
                     </main>
 
                     {{-- Right Sidebar: Page Headings --}}
-                    <aside class="hidden lg:block">
-                        <div class="sticky top-24 h-[calc(100vh-8rem)] w-70 overflow-y-auto pl-20">
+                    <aside class="hidden self-stretch lg:block">
+                        <div class="sticky max-h-[calc(100vh-var(--docs-sticky-top)-2rem)] w-70 overflow-y-auto pl-20" style="top: var(--docs-sticky-top)">
                             {{-- See headings.blade.php --}}
                             {{ $aside }}
                         </div>
