@@ -43,10 +43,29 @@ final readonly class MarkdownService
     public function toHtml(string $markdown, ?string $currentSection = null): string
     {
         $html = $this->converter->convert($markdown)->getContent();
+        $html = $this->stripContentBeforeH1($html);
         $html = $this->convertGitHubAlerts($html);
         $html = $this->wrapCodeBlocks($html);
 
         return $this->transformLinks($html, $currentSection);
+    }
+
+    /**
+     * Remove any content that appears before the first H1 heading.
+     */
+    private function stripContentBeforeH1(string $html): string
+    {
+        $position = stripos($html, '<h1');
+
+        if ($position === false) {
+            return $html;
+        }
+
+        if ($position === 0) {
+            return $html;
+        }
+
+        return substr($html, $position);
     }
 
     /**
