@@ -18,4 +18,21 @@ return [
 
     'path' => env('DOCS_PATH'),
 
+    /*
+    |--------------------------------------------------------------------------
+    | GitHub Repository
+    |--------------------------------------------------------------------------
+    |
+    | Configuration for transforming relative links in documentation to
+    | GitHub blob URLs. Relative links like `section/file.md` will be
+    | converted to full GitHub URLs pointing to the source repository.
+    |
+    */
+
+    'github' => [
+        'repo' => env('DOCS_GITHUB_REPO', 'loadinglucian/deployer-php'),
+        'branch' => env('DOCS_GITHUB_BRANCH', 'main'),
+        'dir' => env('DOCS_GITHUB_DIR', 'docs'),
+    ],
+
 ];

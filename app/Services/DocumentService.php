@@ -35,11 +35,9 @@ final readonly class DocumentService
             return null;
         }
 
-        $html = $this->markdown->toHtml($content);
+        $html = $this->markdown->toHtml($content, $section);
         $headings = $this->headingExtractor->extract($html);
-
-        // Extract title from first h1 heading
-        $title = $this->extractTitle($headings, $page);
+        $title = $this->extractTitle($html, $page);
 
         return [
             'title' => $title,
@@ -73,7 +71,7 @@ final readonly class DocumentService
 
         $html = $this->markdown->toHtml($content);
         $headings = $this->headingExtractor->extract($html);
-        $title = $this->extractTitle($headings, 'README');
+        $title = $this->extractTitle($html, 'README');
 
         return [
             'title' => $title,
@@ -83,19 +81,41 @@ final readonly class DocumentService
     }
 
     /**
-     * Extract title from headings or fallback to page name.
-     *
-     * @param  array<int, array{level: int, text: string, id: string}>  $headings
+     * Extract title from HTML h1 or fallback to page name.
      */
-    private function extractTitle(array $headings, string $fallback): string
+    private function extractTitle(string $html, string $fallback): string
     {
-        foreach ($headings as $heading) {
-            if ($heading['level'] === 1) {
-                return $heading['text'];
-            }
+        $h1 = $this->extractH1FromHtml($html);
+
+        if ($h1 !== null && $h1 !== '') {
+            return $h1;
         }
 
         // Convert slug to title case as fallback
         return str_replace('-', ' ', ucfirst($fallback));
+    }
+
+    /**
+     * Extract h1 heading text directly from HTML.
+     */
+    private function extractH1FromHtml(string $html): ?string
+    {
+        if (trim($html) === '') {
+            return null;
+        }
+
+        $dom = new \DOMDocument;
+        $dom->loadHTML(
+            '<?xml encoding="UTF-8"><div>'.$html.'</div>',
+            LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR
+        );
+
+        $h1 = $dom->getElementsByTagName('h1')->item(0);
+
+        if ($h1 === null) {
+            return null;
+        }
+
+        return trim($h1->textContent);
     }
 }
