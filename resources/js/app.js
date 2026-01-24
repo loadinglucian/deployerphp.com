@@ -29,5 +29,15 @@ document.addEventListener('DOMContentLoaded', () => {
 // ----
 
 Alpine.plugin(collapse);
+
+Alpine.store('darkMode', {
+    on: localStorage.getItem('darkMode') === 'true' || (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches),
+
+    toggle() {
+        this.on = !this.on;
+        localStorage.setItem('darkMode', this.on);
+    },
+});
+
 window.Alpine = Alpine;
 Alpine.start();
