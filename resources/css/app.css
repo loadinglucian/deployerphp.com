@@ -1,5 +1,5 @@
 @import 'tailwindcss';
-@import './synthwave-highlight.css';
+@import './highlight.css';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -25,58 +25,11 @@
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
 
     /* ----
-     * Synthwave Brand Colors (Neon Accents)
+     * Accent Color
      * ---- */
 
-    --color-neon-cyan: oklch(0.75 0.15 200);
-    --color-neon-cyan-light: oklch(0.85 0.12 200);
-    --color-neon-cyan-dark: oklch(0.65 0.18 200);
-
-    --color-electric-blue: oklch(0.65 0.2 260);
-    --color-electric-blue-light: oklch(0.75 0.17 260);
-    --color-electric-blue-dark: oklch(0.55 0.22 260);
-
-    --color-hot-pink: oklch(0.7 0.25 330);
-    --color-hot-pink-light: oklch(0.8 0.22 330);
-    --color-hot-pink-dark: oklch(0.6 0.28 330);
-
-    --color-neon-purple: oklch(0.55 0.25 295);
-    --color-neon-purple-light: oklch(0.65 0.22 295);
-    --color-neon-purple-dark: oklch(0.45 0.28 295);
-
-    /* ----
-     * Synthwave Surface Colors - Light Mode
-     * ---- */
-
-    --color-synth-bg: oklch(0.98 0.005 285);
-    --color-synth-bg-alt: oklch(0.95 0.01 285);
-    --color-synth-surface: oklch(1 0 0);
-
-    /* ----
-     * Synthwave Surface Colors - Dark Mode
-     * ---- */
-
-    --color-synth-dark: oklch(0.14 0.02 285);
-    --color-synth-dark-alt: oklch(0.18 0.025 285);
-    --color-synth-dark-surface: oklch(0.22 0.03 285);
-
-    /* ----
-     * Synthwave Text Colors
-     * ---- */
-
-    --color-synth-text: oklch(0.25 0.03 285);
-    --color-synth-text-muted: oklch(0.45 0.03 285);
-    --color-synth-text-light: oklch(0.80 0.01 285);
-    --color-synth-text-light-muted: oklch(0.7 0.02 285);
-
-    /* ----
-     * Synthwave Border Colors
-     * ---- */
-
-    --color-synth-border: oklch(0.88 0.015 285);
-    --color-synth-border-accent: oklch(0.75 0.12 285);
-    --color-synth-border-dark: oklch(0.3 0.03 285);
-    --color-synth-border-dark-accent: oklch(0.45 0.1 295);
+    --color-accent: #2299dd;
+    --color-accent-hover: #1a7ab8;
 }
 
 /* ----
@@ -84,43 +37,44 @@
  * ---- */
 
 .prose {
-    --tw-prose-body: var(--color-synth-text);
-    --tw-prose-headings: oklch(0.2 0.04 285);
-    --tw-prose-links: var(--color-neon-cyan-dark);
-    --tw-prose-code: var(--color-neon-purple-dark);
-    --tw-prose-pre-bg: oklch(0.97 0.01 285);
-    --tw-prose-pre-code: oklch(0.3 0.02 285);
-    --tw-prose-counters: var(--color-synth-text-muted);
-    --tw-prose-bullets: oklch(0.55 0.1 295);
-    --tw-prose-hr: var(--color-synth-border);
-    --tw-prose-quotes: var(--color-synth-text);
-    --tw-prose-quote-borders: var(--color-neon-purple);
-    --tw-prose-captions: var(--color-synth-text-muted);
-    --tw-prose-kbd: var(--color-synth-text);
-    --tw-prose-kbd-shadows: var(--color-synth-text);
-    --tw-prose-th-borders: var(--color-synth-border);
-    --tw-prose-td-borders: oklch(0.9 0.01 285);
+    --tw-prose-body: #3f3f46; /* zinc-700 */
+    --tw-prose-headings: #18181b; /* zinc-900 */
+    --tw-prose-links: #2299dd; /* accent */
+    --tw-prose-code: #7c3aed; /* violet-600 */
+    --tw-prose-pre-bg: #f4f4f5; /* zinc-100 */
+    --tw-prose-pre-code: #3f3f46; /* zinc-700 */
+    --tw-prose-counters: #71717a; /* zinc-500 */
+    --tw-prose-bullets: #a1a1aa; /* zinc-400 */
+    --tw-prose-hr: #e4e4e7; /* zinc-200 */
+    --tw-prose-quotes: #3f3f46; /* zinc-700 */
+    --tw-prose-quote-borders: #2299dd; /* accent */
+    --tw-prose-captions: #71717a; /* zinc-500 */
+    --tw-prose-kbd: #18181b; /* zinc-900 */
+    --tw-prose-kbd-shadows: #18181b; /* zinc-900 */
+    --tw-prose-th-borders: #e4e4e7; /* zinc-200 */
+    --tw-prose-td-borders: #f4f4f5; /* zinc-100 */
 
     color: var(--tw-prose-body);
     max-width: 65ch;
     font-size: 1rem;
-    line-height: 1.75;
+    line-height: 1.625;
 }
 
 .prose :where(h1, h2, h3, h4, h5, h6) {
     color: var(--tw-prose-headings);
-    font-weight: 700;
-    line-height: 1.25;
+    font-weight: 600;
 }
 
 .prose :where(h1) {
-    font-size: 2.25rem;
+    font-size: 1.5rem;
+    line-height: 1.333;
     margin-top: 0;
     margin-bottom: 1.5rem;
 }
 
 .prose :where(h2) {
-    font-size: 1.5rem;
+    font-size: 1.125rem;
+    line-height: 1.556;
     margin-top: 2.5rem;
     margin-bottom: 1rem;
     padding-bottom: 0.5rem;
@@ -128,7 +82,8 @@
 }
 
 .prose :where(h3) {
-    font-size: 1.25rem;
+    font-size: 1rem;
+    line-height: 1.5;
     margin-top: 2rem;
     margin-bottom: 0.75rem;
 }
@@ -146,7 +101,7 @@
 }
 
 .prose :where(a):hover {
-    color: var(--color-neon-cyan);
+    color: var(--color-accent-hover);
 }
 
 .prose :where(strong) {
@@ -158,7 +113,7 @@
     color: var(--tw-prose-code);
     font-size: 0.875em;
     font-weight: 600;
-    background-color: oklch(0.96 0.02 295 / 0.5);
+    background-color: #f4f4f580; /* zinc-100 with opacity */
     padding: 0.125rem 0.375rem;
     border-radius: 0.25rem;
 }
@@ -176,7 +131,7 @@
     border-radius: 0.5rem;
     margin-top: 1.5rem;
     margin-bottom: 1.5rem;
-    border: 1px solid var(--color-synth-border);
+    border: 1px solid #e4e4e7; /* zinc-200 */
 }
 
 .prose :where(pre code) {
@@ -185,7 +140,7 @@
     font-size: 0.875rem;
     font-weight: 400;
     color: inherit;
-    line-height: 1.7;
+    line-height: 2;
 }
 
 .prose :where(ul) {
@@ -260,32 +215,31 @@
  * ---- */
 
 .dark .prose {
-    --tw-prose-body: var(--color-synth-text-light);
-    --tw-prose-headings: oklch(0.98 0.005 285);
-    --tw-prose-links: var(--color-neon-cyan);
-    --tw-prose-code: var(--color-hot-pink-light);
-    --tw-prose-pre-bg: oklch(0.15 0.03 285);
-    --tw-prose-pre-code: oklch(0.85 0.02 285);
-    --tw-prose-counters: var(--color-synth-text-light-muted);
-    --tw-prose-bullets: oklch(0.65 0.15 295);
-    --tw-prose-hr: var(--color-synth-border-dark);
-    --tw-prose-quotes: var(--color-synth-text-light);
-    --tw-prose-quote-borders: oklch(0.55 0.2 295);
-    --tw-prose-th-borders: var(--color-synth-border-dark);
-    --tw-prose-td-borders: oklch(0.25 0.02 285);
+    --tw-prose-body: #d4d4d8; /* zinc-300 */
+    --tw-prose-headings: #fafafa; /* zinc-50 */
+    --tw-prose-links: #2299dd; /* accent */
+    --tw-prose-code: #c4b5fd; /* violet-300 */
+    --tw-prose-pre-bg: #27272a; /* zinc-800 */
+    --tw-prose-pre-code: #d4d4d8; /* zinc-300 */
+    --tw-prose-counters: #71717a; /* zinc-500 */
+    --tw-prose-bullets: #71717a; /* zinc-500 */
+    --tw-prose-hr: #3f3f46; /* zinc-700 */
+    --tw-prose-quotes: #d4d4d8; /* zinc-300 */
+    --tw-prose-quote-borders: #2299dd; /* accent */
+    --tw-prose-th-borders: #3f3f46; /* zinc-700 */
+    --tw-prose-td-borders: #27272a; /* zinc-800 */
 }
 
 .dark .prose :where(code) {
-    background-color: oklch(0.2 0.04 295 / 0.5);
+    background-color: #27272a80; /* zinc-800 with opacity */
 }
 
 .dark .prose :where(pre) {
-    border-color: var(--color-synth-border-dark);
+    border-color: #3f3f46; /* zinc-700 */
 }
 
 .dark .prose :where(a):hover {
-    color: var(--color-neon-cyan-light);
-    text-shadow: 0 0 8px oklch(0.75 0.15 200 / 0.4);
+    color: #38bdf8; /* sky-400 */
 }
 
 /* ----
@@ -295,7 +249,7 @@
 .prose .heading-permalink {
     text-decoration: none;
     margin-right: 0.5rem;
-    color: var(--color-synth-text-muted);
+    color: #71717a; /* zinc-500 */
     opacity: 0;
     transition:
         opacity 0.15s ease-in-out,
@@ -304,16 +258,15 @@
 
 .prose :where(h1, h2, h3, h4, h5, h6):hover .heading-permalink {
     opacity: 1;
-    color: var(--color-neon-cyan);
+    color: #2299dd; /* accent */
 }
 
 .dark .prose .heading-permalink {
-    color: var(--color-synth-text-light-muted);
+    color: #71717a; /* zinc-500 */
 }
 
 .dark .prose :where(h1, h2, h3, h4, h5, h6):hover .heading-permalink {
-    color: var(--color-neon-cyan);
-    text-shadow: 0 0 8px oklch(0.75 0.15 200 / 0.4);
+    color: #2299dd; /* accent */
 }
 
 /* ----
@@ -349,114 +302,109 @@
 }
 
 /* ----
- * Light Mode Alerts - Synthwave Palette
+ * Light Mode Alerts
  * ---- */
 
 .alert-tip {
-    background-color: oklch(0.96 0.04 175);
-    border-color: oklch(0.7 0.12 175);
-    color: oklch(0.35 0.08 175);
+    background-color: #ecfeff; /* cyan-50 */
+    border-color: #22d3ee; /* cyan-400 */
+    color: #155e75; /* cyan-800 */
 }
 
 .alert-tip .alert-icon {
-    color: oklch(0.55 0.15 175);
+    color: #06b6d4; /* cyan-500 */
 }
 
 .alert-note {
-    background-color: oklch(0.96 0.03 250);
-    border-color: oklch(0.65 0.15 250);
-    color: oklch(0.35 0.1 250);
+    background-color: #eff6ff; /* blue-50 */
+    border-color: #60a5fa; /* blue-400 */
+    color: #1e40af; /* blue-800 */
 }
 
 .alert-note .alert-icon {
-    color: oklch(0.55 0.18 250);
+    color: #3b82f6; /* blue-500 */
 }
 
 .alert-warning {
-    background-color: oklch(0.96 0.06 70);
-    border-color: oklch(0.72 0.15 70);
-    color: oklch(0.4 0.1 70);
+    background-color: #fffbeb; /* amber-50 */
+    border-color: #fbbf24; /* amber-400 */
+    color: #92400e; /* amber-800 */
 }
 
 .alert-warning .alert-icon {
-    color: oklch(0.62 0.18 70);
+    color: #f59e0b; /* amber-500 */
 }
 
 .alert-important {
-    background-color: oklch(0.96 0.04 295);
-    border-color: oklch(0.6 0.18 295);
-    color: oklch(0.35 0.12 295);
+    background-color: #faf5ff; /* purple-50 */
+    border-color: #c084fc; /* purple-400 */
+    color: #6b21a8; /* purple-800 */
 }
 
 .alert-important .alert-icon {
-    color: oklch(0.55 0.22 295);
+    color: #a855f7; /* purple-500 */
 }
 
 .alert-caution {
-    background-color: oklch(0.96 0.04 10);
-    border-color: oklch(0.65 0.18 10);
-    color: oklch(0.4 0.12 10);
+    background-color: #fef2f2; /* red-50 */
+    border-color: #f87171; /* red-400 */
+    color: #991b1b; /* red-800 */
 }
 
 .alert-caution .alert-icon {
-    color: oklch(0.58 0.22 10);
+    color: #ef4444; /* red-500 */
 }
 
 /* ----
- * Dark Mode Alerts - Synthwave Palette with Glow
+ * Dark Mode Alerts
  * ---- */
 
 .dark .alert-tip {
-    background-color: oklch(0.18 0.04 175 / 0.5);
-    border-color: oklch(0.5 0.14 175);
-    color: oklch(0.85 0.06 175);
-    box-shadow: 0 0 15px oklch(0.55 0.15 175 / 0.15);
+    background-color: #164e6380; /* cyan-900 with opacity */
+    border-color: #22d3ee; /* cyan-400 */
+    color: #a5f3fc; /* cyan-200 */
 }
 
 .dark .alert-tip .alert-icon {
-    color: oklch(0.75 0.18 175);
+    color: #22d3ee; /* cyan-400 */
 }
 
 .dark .alert-note {
-    background-color: oklch(0.18 0.04 250 / 0.5);
-    border-color: oklch(0.5 0.18 250);
-    color: oklch(0.85 0.05 250);
-    box-shadow: 0 0 15px oklch(0.6 0.18 250 / 0.15);
+    background-color: #1e3a8a80; /* blue-900 with opacity */
+    border-color: #60a5fa; /* blue-400 */
+    color: #bfdbfe; /* blue-200 */
 }
 
 .dark .alert-note .alert-icon {
-    color: oklch(0.72 0.2 250);
+    color: #60a5fa; /* blue-400 */
 }
 
 .dark .alert-warning {
-    background-color: oklch(0.18 0.05 70 / 0.5);
-    border-color: oklch(0.55 0.18 70);
-    color: oklch(0.88 0.06 70);
-    box-shadow: 0 0 15px oklch(0.65 0.18 70 / 0.15);
+    background-color: #78350f80; /* amber-900 with opacity */
+    border-color: #fbbf24; /* amber-400 */
+    color: #fde68a; /* amber-200 */
 }
 
 .dark .alert-warning .alert-icon {
-    color: oklch(0.78 0.2 70);
+    color: #fbbf24; /* amber-400 */
 }
 
 .dark .alert-important {
-    background-color: oklch(0.18 0.05 295 / 0.5);
-    border-color: oklch(0.5 0.2 295);
-    color: oklch(0.85 0.06 295);
-    box-shadow: 0 0 15px oklch(0.55 0.22 295 / 0.2);
+    background-color: #581c8780; /* purple-900 with opacity */
+    border-color: #c084fc; /* purple-400 */
+    color: #e9d5ff; /* purple-200 */
 }
 
 .dark .alert-important .alert-icon {
-    color: oklch(0.7 0.25 295);
+    color: #c084fc; /* purple-400 */
 }
 
 .dark .alert-caution {
-    background-color: oklch(0.18 0.05 10 / 0.5);
-    border-color: oklch(0.52 0.2 10);
-    color: oklch(0.88 0.05 10);
-    box-shadow: 0 0 15px oklch(0.58 0.22 10 / 0.2);
+    background-color: #7f1d1d80; /* red-900 with opacity */
+    border-color: #f87171; /* red-400 */
+    color: #fecaca; /* red-200 */
 }
 
 .dark .alert-caution .alert-icon {
-    color: oklch(0.72 0.24 10);
+    color: #f87171; /* red-400 */
 }
