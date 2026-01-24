@@ -18,17 +18,31 @@ final class DocsController extends Controller
     ) {}
 
     /**
-     * Redirect to the first document in the TOC.
+     * Show the README or redirect to the first document.
      */
-    public function index(): RedirectResponse
+    public function index(): View|RedirectResponse
     {
+        $readme = $this->documentService->loadReadme();
+
+        if ($readme !== null) {
+            $toc = $this->tocParser->parse();
+
+            return view('docs.show', [
+                'title' => $readme['title'],
+                'content' => $readme['content'],
+                'headings' => $readme['headings'],
+                'toc' => $toc,
+                'currentPath' => null,
+            ]);
+        }
+
+        // Fallback: redirect to first doc if README doesn't exist
         $firstPath = $this->tocParser->firstDocPath();
 
         if ($firstPath === null) {
             throw new NotFoundHttpException('No documentation found.');
         }
 
-        // Split path into section and page
         $parts = explode('/', $firstPath);
 
         if (count($parts) !== 2) {

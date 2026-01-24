@@ -49,6 +49,40 @@ final readonly class DocumentService
     }
 
     /**
+     * Load and render the README from the parent docs directory.
+     *
+     * @return array{
+     *     title: string,
+     *     content: string,
+     *     headings: array<int, array{level: int, text: string, id: string}>
+     * }|null
+     */
+    public function loadReadme(): ?array
+    {
+        $filePath = dirname($this->docsPath->path()).'/README.md';
+
+        if (! file_exists($filePath)) {
+            return null;
+        }
+
+        $content = file_get_contents($filePath);
+
+        if ($content === false) {
+            return null;
+        }
+
+        $html = $this->markdown->toHtml($content);
+        $headings = $this->headingExtractor->extract($html);
+        $title = $this->extractTitle($headings, 'README');
+
+        return [
+            'title' => $title,
+            'content' => $html,
+            'headings' => $headings,
+        ];
+    }
+
+    /**
      * Extract title from headings or fallback to page name.
      *
      * @param  array<int, array{level: int, text: string, id: string}>  $headings
