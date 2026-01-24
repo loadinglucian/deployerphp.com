@@ -1,10 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers;
 
+use App\Services\DocsPathService;
+use App\Services\DocumentService;
+use App\Services\HeadingExtractorService;
+use App\Services\MarkdownService;
+use App\Services\TocParserService;
 use Illuminate\Support\ServiceProvider;
 
-class AppServiceProvider extends ServiceProvider
+final class AppServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
@@ -12,7 +19,11 @@ class AppServiceProvider extends ServiceProvider
     #[\Override]
     public function register(): void
     {
-        //
+        $this->app->singleton(DocsPathService::class);
+        $this->app->singleton(MarkdownService::class);
+        $this->app->singleton(TocParserService::class);
+        $this->app->singleton(HeadingExtractorService::class);
+        $this->app->singleton(DocumentService::class);
     }
 
     /**

@@ -1,0 +1,169 @@
+/* ----
+ * Clean Syntax Highlighting
+ *
+ * A neutral, professional theme for highlight.js using the zinc palette
+ * with colorful but muted accent colors.
+ * ---- */
+
+/* ----
+ * Light Mode
+ * ---- */
+
+.hljs {
+    background: #f4f4f5; /* zinc-100 */
+    color: #3f3f46; /* zinc-700 */
+    padding: 1rem 1.25rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal,
+.hljs-section,
+.hljs-link {
+    color: #ec4899; /* pink-500 */
+}
+
+.hljs-string,
+.hljs-title.class_.inherited__,
+.hljs-template-variable,
+.hljs-type,
+.hljs-addition {
+    color: #14b8a6; /* teal-500 */
+}
+
+.hljs-number,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-meta,
+.hljs-built_in {
+    color: #f97316; /* orange-500 */
+}
+
+.hljs-comment,
+.hljs-quote,
+.hljs-deletion {
+    color: #71717a; /* zinc-500 */
+    font-style: italic;
+}
+
+.hljs-function,
+.hljs-title.function_ {
+    color: #3b82f6; /* blue-500 */
+}
+
+.hljs-variable,
+.hljs-variable.language_,
+.hljs-variable.constant_,
+.hljs-property {
+    color: #8b5cf6; /* violet-500 */
+}
+
+.hljs-title.class_,
+.hljs-class .hljs-title,
+.hljs-title {
+    color: #2299dd; /* accent */
+}
+
+.hljs-operator,
+.hljs-punctuation {
+    color: #a1a1aa; /* zinc-400 */
+}
+
+.hljs-attr,
+.hljs-attribute {
+    color: #2299dd; /* accent */
+}
+
+.hljs-tag {
+    color: #ec4899; /* pink-500 */
+}
+
+.hljs-name {
+    color: #ec4899; /* pink-500 */
+}
+
+.hljs-params {
+    color: #6366f1; /* indigo-500 */
+}
+
+/* ----
+ * Dark Mode
+ * ---- */
+
+.dark .hljs {
+    background: #27272a; /* zinc-800 */
+    color: #d4d4d8; /* zinc-300 */
+}
+
+.dark .hljs-keyword,
+.dark .hljs-selector-tag,
+.dark .hljs-literal,
+.dark .hljs-section,
+.dark .hljs-link {
+    color: #f472b6; /* pink-400 */
+}
+
+.dark .hljs-string,
+.dark .hljs-title.class_.inherited__,
+.dark .hljs-template-variable,
+.dark .hljs-type,
+.dark .hljs-addition {
+    color: #2dd4bf; /* teal-400 */
+}
+
+.dark .hljs-number,
+.dark .hljs-symbol,
+.dark .hljs-bullet,
+.dark .hljs-meta,
+.dark .hljs-built_in {
+    color: #fb923c; /* orange-400 */
+}
+
+.dark .hljs-comment,
+.dark .hljs-quote,
+.dark .hljs-deletion {
+    color: #71717a; /* zinc-500 */
+    font-style: italic;
+}
+
+.dark .hljs-function,
+.dark .hljs-title.function_ {
+    color: #60a5fa; /* blue-400 */
+}
+
+.dark .hljs-variable,
+.dark .hljs-variable.language_,
+.dark .hljs-variable.constant_,
+.dark .hljs-property {
+    color: #a78bfa; /* violet-400 */
+}
+
+.dark .hljs-title.class_,
+.dark .hljs-class .hljs-title,
+.dark .hljs-title {
+    color: #38bdf8; /* sky-400 */
+}
+
+.dark .hljs-operator,
+.dark .hljs-punctuation {
+    color: #a1a1aa; /* zinc-400 */
+}
+
+.dark .hljs-attr,
+.dark .hljs-attribute {
+    color: #38bdf8; /* sky-400 */
+}
+
+.dark .hljs-tag {
+    color: #f472b6; /* pink-400 */
+}
+
+.dark .hljs-name {
+    color: #f472b6; /* pink-400 */
+}
+
+.dark .hljs-params {
+    color: #818cf8; /* indigo-400 */
+}
