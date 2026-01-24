@@ -8,6 +8,7 @@ use Illuminate\Support\HtmlString;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use League\CommonMark\Extension\GithubFlavoredMarkdownExtension;
+use League\CommonMark\Extension\HeadingPermalink\HeadingPermalinkExtension;
 use League\CommonMark\MarkdownConverter;
 
 final readonly class MarkdownService
@@ -16,10 +17,22 @@ final readonly class MarkdownService
 
     public function __construct()
     {
-        $environment = new Environment;
+        $config = [
+            'heading_permalink' => [
+                'apply_id_to_heading' => true,
+                'insert' => 'none',
+                'id_prefix' => '',
+                'fragment_prefix' => '',
+                'min_heading_level' => 2,
+                'max_heading_level' => 3,
+            ],
+        ];
+
+        $environment = new Environment($config);
 
         $environment->addExtension(new CommonMarkCoreExtension);
         $environment->addExtension(new GithubFlavoredMarkdownExtension);
+        $environment->addExtension(new HeadingPermalinkExtension);
 
         $this->converter = new MarkdownConverter($environment);
     }

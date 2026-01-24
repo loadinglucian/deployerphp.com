@@ -16,7 +16,7 @@ final class TocParserService
     private ?array $cachedToc = null;
 
     public function __construct(
-        private DocsPathService $docsPath,
+        private readonly DocsPathService $docsPath,
     ) {}
 
     /**
