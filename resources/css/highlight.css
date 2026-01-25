@@ -36,9 +36,12 @@
 .hljs-number,
 .hljs-symbol,
 .hljs-bullet,
-.hljs-meta,
-.hljs-built_in {
+.hljs-meta {
     color: #f97316; /* orange-500 */
+}
+
+.hljs-built_in {
+    color: #06b6d4; /* cyan-500 */
 }
 
 .hljs-comment,
@@ -85,7 +88,7 @@
 }
 
 .hljs-params {
-    color: #6366f1; /* indigo-500 */
+    color: #d946ef; /* fuchsia-500 */
 }
 
 /* ----
@@ -116,9 +119,12 @@
 .dark .hljs-number,
 .dark .hljs-symbol,
 .dark .hljs-bullet,
-.dark .hljs-meta,
-.dark .hljs-built_in {
+.dark .hljs-meta {
     color: #fb923c; /* orange-400 */
+}
+
+.dark .hljs-built_in {
+    color: #22d3ee; /* cyan-400 */
 }
 
 .dark .hljs-comment,
@@ -165,5 +171,5 @@
 }
 
 .dark .hljs-params {
-    color: #818cf8; /* indigo-400 */
+    color: #e879f9; /* fuchsia-400 */
 }
