@@ -1,55 +1,67 @@
-@props(['type'])
+@props([
+    'type',
+])
 
 @php
-    $styles = match($type) {
+    $styles = match ($type) {
         'tip' => [
-            'container' => 'bg-cyan-50 border-cyan-400 text-cyan-800 dark:bg-cyan-900/50 dark:border-cyan-400 dark:text-cyan-200',
+            'container' => 'border-l-cyan-400 dark:border-l-cyan-400',
             'icon' => 'text-cyan-500 dark:text-cyan-400',
         ],
         'note' => [
-            'container' => 'bg-blue-50 border-blue-400 text-blue-800 dark:bg-blue-900/50 dark:border-blue-400 dark:text-blue-200',
+            'container' => 'border-l-blue-400 dark:border-l-blue-400',
             'icon' => 'text-blue-500 dark:text-blue-400',
         ],
         'warning' => [
-            'container' => 'bg-amber-50 border-amber-400 text-amber-800 dark:bg-amber-900/50 dark:border-amber-400 dark:text-amber-200',
+            'container' => 'border-l-amber-400 dark:border-l-amber-400',
             'icon' => 'text-amber-500 dark:text-amber-400',
         ],
         'important' => [
-            'container' => 'bg-purple-50 border-purple-400 text-purple-800 dark:bg-purple-900/50 dark:border-purple-400 dark:text-purple-200',
+            'container' => 'border-l-purple-400 dark:border-l-purple-400',
             'icon' => 'text-purple-500 dark:text-purple-400',
         ],
-        'caution' => [
-            'container' => 'bg-red-50 border-red-400 text-red-800 dark:bg-red-900/50 dark:border-red-400 dark:text-red-200',
-            'icon' => 'text-red-500 dark:text-red-400',
-        ],
         default => [
-            'container' => 'bg-zinc-50 border-zinc-400 text-zinc-800 dark:bg-zinc-900/50 dark:border-zinc-400 dark:text-zinc-200',
+            'container' => 'border-l-zinc-400 dark:border-l-zinc-400',
             'icon' => 'text-zinc-500 dark:text-zinc-400',
         ],
     };
 @endphp
 
-<div class="flex gap-3 rounded-lg border p-4 my-6 {{ $styles['container'] }}">
-    <span class="shrink-0 mt-0.5 {{ $styles['icon'] }}">
+<div class="{{ $styles['container'] }} flex flex-col gap-2 border-l-4 px-4 py-2">
+    <div class="{{ $styles['icon'] }}">
         @switch($type)
             @case('tip')
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-5"><path d="M8 1.5A5.5 5.5 0 0 0 2.5 7c0 1.58.67 3 1.74 4.01L4 15.5h8l-.24-4.49A5.5 5.5 0 0 0 8 1.5zM5.5 14.5v-1h5v1h-5z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z"
+                    />
+                </svg>
+
                 @break
             @case('note')
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-5"><path fill-rule="evenodd" d="M8 1.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zM7.25 8.5v-3h1.5v3h-1.5zm0 2.25a.75.75 0 1 1 1.5 0 .75.75 0 0 1-1.5 0z" clip-rule="evenodd"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+                </svg>
+
                 @break
             @case('warning')
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-5"><path fill-rule="evenodd" d="M8.893 1.5c-.183-.31-.52-.5-.887-.5s-.704.19-.887.5L.387 12.996c-.182.31-.182.69 0 1 .183.31.52.5.887.5h13.452c.367 0 .704-.19.887-.5.183-.31.183-.69 0-1L8.893 1.5zM7.25 5h1.5v4h-1.5V5zm.75 6.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5z" clip-rule="evenodd"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+                </svg>
+
                 @break
             @case('important')
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-5"><path fill-rule="evenodd" d="M8 1.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zM7.25 4.75a.75.75 0 1 1 1.5 0 .75.75 0 0 1-1.5 0zm1.5 2.5v4h-1.5v-4h1.5z" clip-rule="evenodd"/></svg>
-                @break
-            @case('caution')
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-5"><path fill-rule="evenodd" d="M8 1.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zM6.22 6.22a.75.75 0 0 1 1.06 0L8 6.94l.72-.72a.75.75 0 1 1 1.06 1.06l-.72.72.72.72a.75.75 0 1 1-1.06 1.06L8 9.06l-.72.72a.75.75 0 1 1-1.06-1.06l.72-.72-.72-.72a.75.75 0 0 1 0-1.06z" clip-rule="evenodd"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0M3.124 7.5A8.969 8.969 0 0 1 5.292 3m13.416 0a8.969 8.969 0 0 1 2.168 4.5" />
+                </svg>
+
                 @break
         @endswitch
-    </span>
-    <div class="min-w-0 grow [&>p:first-child]:mt-0 [&>p:last-child]:mb-0">
+    </div>
+
+    <div class="min-w-0 grow [&>p:first-child]:mt-0! [&>p:last-child]:mb-0!">
         {!! $slot !!}
     </div>
 </div>
