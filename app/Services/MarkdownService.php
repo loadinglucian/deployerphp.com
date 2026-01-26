@@ -42,6 +42,7 @@ final readonly class MarkdownService
      */
     public function toHtml(string $markdown, ?string $currentSection = null): string
     {
+        $markdown = $this->stripMarkdownArtifacts($markdown);
         $html = $this->converter->convert($markdown)->getContent();
         $html = $this->stripContentBeforeH1($html);
         $html = $this->convertGitHubAlerts($html);
@@ -69,6 +70,32 @@ final readonly class MarkdownService
     }
 
     /**
+     * Remove embedded TOC sections and legacy anchor points.
+     *
+     * Strips:
+     * - TOC blocks: <!-- toc --> ... <!-- /toc -->
+     * - Empty anchors: <a name="..."></a>
+     *
+     * These are redundant since the site generates its own navigation.
+     */
+    private function stripMarkdownArtifacts(string $markdown): string
+    {
+        // Strip TOC comment blocks
+        $markdown = preg_replace(
+            '/<!-- toc -->.*?<!-- \/toc -->/s',
+            '',
+            $markdown
+        ) ?? $markdown;
+
+        // Strip empty anchor points (legacy heading anchors)
+        return preg_replace(
+            '/<a\s+name="[^"]*">\s*<\/a>\s*/i',
+            '',
+            $markdown
+        ) ?? $markdown;
+    }
+
+    /**
      * Convert GitHub-style alerts to styled callout boxes.
      *
      * Transforms blockquotes like:
@@ -79,7 +106,7 @@ final readonly class MarkdownService
      */
     private function convertGitHubAlerts(string $html): string
     {
-        $alertTypes = ['TIP', 'NOTE', 'WARNING', 'IMPORTANT', 'CAUTION'];
+        $alertTypes = ['TIP', 'NOTE', 'WARNING', 'IMPORTANT'];
 
         foreach ($alertTypes as $type) {
             // Pattern: <blockquote>\n<p>[!TYPE]\nContent...</p>\n</blockquote>

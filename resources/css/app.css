@@ -63,7 +63,7 @@
     --tw-prose-body: #3f3f46; /* zinc-700 */
     --tw-prose-headings: #18181b; /* zinc-900 */
     --tw-prose-links: #2299dd; /* accent */
-    --tw-prose-code: #7c3aed; /* violet-600 */
+    --tw-prose-code: #d946ef; /* fuchsia-600 */
     --tw-prose-pre-bg: #f4f4f5; /* zinc-100 */
     --tw-prose-pre-code: #3f3f46; /* zinc-700 */
     --tw-prose-counters: #71717a; /* zinc-500 */
@@ -136,7 +136,7 @@
 .prose :where(code) {
     color: var(--tw-prose-code);
     font-size: 0.875em;
-    font-weight: 600;
+    font-weight: 400;
     background-color: #f4f4f580; /* zinc-100 with opacity */
     padding: 0.125rem 0.375rem;
     border-radius: 0.25rem;
@@ -240,7 +240,7 @@
     --tw-prose-body: #d4d4d8; /* zinc-300 */
     --tw-prose-headings: #fafafa; /* zinc-50 */
     --tw-prose-links: #2299dd; /* accent */
-    --tw-prose-code: #c4b5fd; /* violet-300 */
+    --tw-prose-code: #e879f9; /* fuchsia-400 */
     --tw-prose-pre-bg: #27272a; /* zinc-800 */
     --tw-prose-pre-code: #d4d4d8; /* zinc-300 */
     --tw-prose-counters: #71717a; /* zinc-500 */
