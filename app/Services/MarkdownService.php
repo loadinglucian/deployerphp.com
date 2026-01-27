@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Markdown\FencedCodeRenderer;
 use Illuminate\Support\HtmlString;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
+use League\CommonMark\Extension\CommonMark\Node\Block\FencedCode;
 use League\CommonMark\Extension\GithubFlavoredMarkdownExtension;
 use League\CommonMark\Extension\HeadingPermalink\HeadingPermalinkExtension;
 use League\CommonMark\MarkdownConverter;
@@ -33,6 +35,9 @@ final readonly class MarkdownService
         $environment->addExtension(new CommonMarkCoreExtension);
         $environment->addExtension(new GithubFlavoredMarkdownExtension);
         $environment->addExtension(new HeadingPermalinkExtension);
+
+        // Register custom renderer to preserve info string modifiers (e.g., "nocopy")
+        $environment->addRenderer(FencedCode::class, new FencedCodeRenderer, 10);
 
         $this->converter = new MarkdownConverter($environment);
     }
@@ -127,18 +132,22 @@ final readonly class MarkdownService
 
     /**
      * Wrap code blocks with the code-block component for copy functionality.
+     *
+     * Captures language class and data-modifiers attribute from the custom renderer.
      */
     private function wrapCodeBlocks(string $html): string
     {
         return preg_replace_callback(
-            '/<pre><code(?:\s+class="language-(\w+)")?>(.*?)<\/code><\/pre>/s',
+            '/<pre(?:\s+data-modifiers="([^"]*)")?><code(?:\s+class="language-(\w+)")?>(.*?)<\/code><\/pre>/s',
             function (array $matches): string {
-                $language = $matches[1] !== '' ? $matches[1] : null;
-                $content = $matches[2];
+                $modifiers = $matches[1] !== '' ? $matches[1] : null;
+                $language = $matches[2] !== '' ? $matches[2] : null;
+                $content = $matches[3];
                 $langClass = $language === null ? '' : " class=\"language-{$language}\"";
 
                 return view('components.docs.code-block', [
                     'language' => $language,
+                    'modifiers' => $modifiers,
                     'slot' => new HtmlString(
                         "<pre><code{$langClass}>{$content}</code></pre>"
                     ),
