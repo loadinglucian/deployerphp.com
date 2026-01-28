@@ -12,6 +12,6 @@ sites:
   -
     domain: deployerphp.com
     server: deployerphp
-    repo: 'git@github.com:loadinglucian/fugazy.git'
+    repo: 'git@github.com:loadinglucian/deployerphp.com.git'
     branch: main
     php_version: '8.5'
