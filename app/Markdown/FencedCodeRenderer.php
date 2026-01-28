@@ -48,10 +48,13 @@ final class FencedCodeRenderer implements NodeRendererInterface
             }
         }
 
+        /** @var array<string, array<string>|bool|string> $codeAttrs */
+        $codeAttrs = $attrs->export();
+
         return new HtmlElement(
             'pre',
             $preAttrs,
-            new HtmlElement('code', $attrs->export(), Xml::escape($node->getLiteral()))
+            new HtmlElement('code', $codeAttrs, Xml::escape($node->getLiteral()))
         );
     }
 }

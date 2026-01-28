@@ -1,2 +1,17 @@
-servers: []
-sites: []
+servers:
+  -
+    name: deployerphp
+    host: 165.245.136.228
+    port: 22
+    username: root
+    privateKeyPath: /Users/lucian/.ssh/id_ed25519
+    provider: digitalocean
+    dropletId: 547535778
+    instanceId: null
+sites:
+  -
+    domain: deployerphp.com
+    server: deployerphp
+    repo: 'git@github.com:loadinglucian/deployerphp.com.git'
+    branch: main
+    php_version: '8.5'
