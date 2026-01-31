@@ -7,6 +7,7 @@
         <link rel="preconnect" href="https://fonts.bunny.net" />
         <link href="https://fonts.bunny.net/css?family=inter:400,500,600&display=swap" rel="stylesheet" />
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @fluxAppearance
     </head>
     <body class="min-h-screen bg-white text-zinc-700 dark:bg-zinc-900 dark:text-zinc-300">
         <div x-data="{ mobileMenuOpen: false }">
@@ -122,5 +123,7 @@
                 </div>
             </div>
         </div>
+
+        @fluxScripts
     </body>
 </html>
