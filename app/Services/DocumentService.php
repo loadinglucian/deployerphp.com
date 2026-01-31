@@ -21,9 +21,9 @@ final readonly class DocumentService
      *     headings: array<int, array{level: int, text: string, id: string}>
      * }|null
      */
-    public function load(string $section, string $page): ?array
+    public function load(string $page): ?array
     {
-        $filePath = sprintf('%s/%s/%s.md', $this->docsPath->path(), $section, $page);
+        $filePath = sprintf('%s/%s.md', $this->docsPath->path(), $page);
 
         if (! file_exists($filePath)) {
             return null;
@@ -35,7 +35,7 @@ final readonly class DocumentService
             return null;
         }
 
-        $html = $this->markdown->toHtml($content, $section);
+        $html = $this->markdown->toHtml($content);
         $headings = $this->headingExtractor->extract($html);
         $title = $this->extractTitle($html, $page);
 

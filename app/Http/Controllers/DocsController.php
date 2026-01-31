@@ -43,38 +43,28 @@ final class DocsController extends Controller
             throw new NotFoundHttpException('No documentation found.');
         }
 
-        $parts = explode('/', $firstPath);
-
-        if (count($parts) !== 2) {
-            throw new NotFoundHttpException('Invalid documentation structure.');
-        }
-
-        return redirect()->route('docs.show', [
-            'section' => $parts[0],
-            'page' => $parts[1],
-        ]);
+        return redirect()->route('docs.show', ['page' => $firstPath]);
     }
 
     /**
      * Show a documentation page.
      */
-    public function show(string $section, string $page): View
+    public function show(string $page): View
     {
-        $document = $this->documentService->load($section, $page);
+        $document = $this->documentService->load($page);
 
         if ($document === null) {
-            throw new NotFoundHttpException("Documentation page not found: {$section}/{$page}");
+            throw new NotFoundHttpException("Documentation page not found: {$page}");
         }
 
         $toc = $this->tocParser->parse();
-        $currentPath = "{$section}/{$page}";
 
         return view('docs.show', [
             'title' => $document['title'],
             'content' => $document['content'],
             'headings' => $document['headings'],
             'toc' => $toc,
-            'currentPath' => $currentPath,
+            'currentPath' => $page,
         ]);
     }
 }

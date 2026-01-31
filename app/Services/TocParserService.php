@@ -114,7 +114,16 @@ final class TocParserService
             }
 
             // Match links: - [Title](path/to/file.md)
-            if ($currentSection !== null && preg_match('/^-\s+\[([^\]]+)\]\(([^)]+)\)/', $line, $linkMatch) === 1) {
+            if (preg_match('/^-\s+\[([^\]]+)\]\(([^)]+\.md)\)/', $line, $linkMatch) === 1) {
+                // Create default section if none exists (flat structure)
+                if ($currentSection === null) {
+                    $currentSection = [
+                        'name' => 'Documentation',
+                        'anchor' => 'documentation',
+                        'links' => [],
+                    ];
+                }
+
                 $currentSection['links'][] = [
                     'title' => $linkMatch[1],
                     'path' => $this->normalizePath($linkMatch[2]),
@@ -131,9 +140,9 @@ final class TocParserService
     }
 
     /**
-     * Normalize a markdown file path to a URL path.
+     * Normalize a markdown file path to a flat URL path.
      *
-     * Example: "getting-started/tldr.md" -> "getting-started/tldr"
+     * Example: "getting-started/tldr.md" -> "tldr"
      */
     private function normalizePath(string $path): string
     {
@@ -142,6 +151,7 @@ final class TocParserService
             $path = substr($path, 0, -3);
         }
 
-        return $path;
+        // Extract just the filename (flatten nested paths)
+        return basename($path);
     }
 }
