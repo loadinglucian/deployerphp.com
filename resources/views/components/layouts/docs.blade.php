@@ -19,7 +19,7 @@
             <flux:sidebar.toggle class="lg:hidden" icon="bars-3" inset="left" />
 
             {{-- Colorful Logo --}}
-            <a href="{{ route('docs.index') }}" class="flex items-center gap-2 font-mono">
+            <a href="{{ route('docs.show') }}" wire:navigate class="flex items-center gap-2 font-mono">
                 <span class="text-lg font-bold text-cyan-400">DeployerPHP</span>
                 <span class="hidden w-48 gap-0 sm:flex">
                     <span class="h-[2px] flex-1 bg-cyan-400"></span>
@@ -89,5 +89,29 @@
         </flux:main>
 
         @fluxScripts
+
+        {{-- Debug: SPA Navigation Indicator --}}
+        @if (app()->isLocal())
+            <div
+                x-data="{
+                    sessionId: null,
+                    navCount: 0,
+                    init() {
+                        // Generate session ID only on full page load
+                        if (!window.__spaSessionId) {
+                            window.__spaSessionId = Math.random().toString(36).substring(2, 8);
+                            window.__spaNavCount = 0;
+                        }
+                        this.sessionId = window.__spaSessionId;
+                        this.navCount = ++window.__spaNavCount;
+                    }
+                }"
+                class="fixed bottom-4 right-4 z-50 flex items-center gap-2 rounded-lg bg-zinc-800 px-3 py-2 font-mono text-xs text-white shadow-lg"
+            >
+                <span class="font-semibold text-cyan-400" x-text="'#' + sessionId"></span>
+                <span class="text-zinc-400">|</span>
+                <span>nav: <span class="text-green-400" x-text="navCount"></span></span>
+            </div>
+        @endif
     </body>
 </html>

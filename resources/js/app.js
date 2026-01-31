@@ -1,6 +1,4 @@
 import './bootstrap';
-import Alpine from 'alpinejs';
-import collapse from '@alpinejs/collapse';
 
 // ----
 // Highlight.js - Syntax Highlighting
@@ -134,17 +132,10 @@ hljs.registerLanguage('sh', extendedBash);
 hljs.registerLanguage('yaml', yaml);
 hljs.registerLanguage('yml', yaml);
 
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('pre code').forEach((el) => {
+// Use livewire:navigated for SPA compatibility (fires on initial load AND after navigation)
+document.addEventListener('livewire:navigated', () => {
+    document.querySelectorAll('pre code:not(.hljs)').forEach((el) => {
         hljs.highlightElement(el);
     });
 });
 
-// ----
-// Alpine.js
-// ----
-
-Alpine.plugin(collapse);
-
-window.Alpine = Alpine;
-Alpine.start();
