@@ -7,9 +7,9 @@ namespace App\Livewire;
 use App\Services\DocumentService;
 use App\Services\TocParserService;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 #[Layout('components.layouts.docs')]
 final class DocsViewer extends Component
@@ -56,7 +56,7 @@ final class DocsViewer extends Component
             $firstPath = $tocParser->firstDocPath();
 
             if ($firstPath === null) {
-                throw new NotFoundHttpException('No documentation found.');
+                throw new HttpResponseException(redirect('/docs/', 301));
             }
 
             $this->redirectRoute('docs.show', ['page' => $firstPath]);
@@ -68,7 +68,7 @@ final class DocsViewer extends Component
         $document = $documentService->load($page);
 
         if ($document === null) {
-            throw new NotFoundHttpException("Documentation page not found: {$page}");
+            throw new HttpResponseException(redirect('/docs/', 301));
         }
 
         $this->page = $page;
