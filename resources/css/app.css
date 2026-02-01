@@ -111,6 +111,11 @@
     margin-bottom: 0.75rem;
 }
 
+/* Offset headings for sticky header when scrolling to anchor */
+.prose :where(h2, h3) {
+    scroll-margin-top: var(--docs-sticky-top);
+}
+
 .prose :where(p) {
     margin-top: 1.25rem;
     margin-bottom: 1.25rem;
