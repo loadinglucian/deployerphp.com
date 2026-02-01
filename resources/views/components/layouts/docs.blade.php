@@ -15,7 +15,7 @@
             // Fixed Header
             // ----
         --}}
-        <flux:header sticky container class="border-b border-zinc-200 bg-white py-3 dark:border-zinc-800 dark:bg-zinc-900">
+        <flux:header sticky container class="z-11 border-b border-zinc-200 bg-white py-3 dark:border-zinc-800 dark:bg-zinc-900">
             <flux:sidebar.toggle class="lg:hidden" icon="bars-3" inset="left" />
 
             {{-- Colorful Logo --}}

@@ -98,10 +98,28 @@
 .prose :where(h2) {
     font-size: 1.125rem;
     line-height: 1.556;
-    margin-top: 2.5rem;
     margin-bottom: 1rem;
     padding-bottom: 0.5rem;
     border-bottom: 1px solid var(--tw-prose-hr);
+
+    /* Sticky behavior */
+    position: sticky;
+    top: calc(var(--docs-sticky-top) - 2rem);
+    z-index: 10;
+
+    /* Solid background with upward extension to hide scrolling content */
+    background-color: white;
+    box-shadow: 0 -1rem 0 0 white;
+
+    /* Extend background to cover scrolling content above */
+    padding-top: 1.5rem;
+    margin-top: 1rem;
+
+    /* Extend background to full content width */
+    margin-left: -1rem;
+    margin-right: -1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
 }
 
 .prose :where(h3) {
@@ -263,6 +281,11 @@
 
 .dark .prose :where(pre) {
     border-color: #3f3f46; /* zinc-700 */
+}
+
+.dark .prose :where(h2) {
+    background-color: #18181b; /* zinc-900 - matches docs body */
+    box-shadow: 0 -1.5rem 0 0 #18181b;
 }
 
 .dark .prose :where(a):hover {
