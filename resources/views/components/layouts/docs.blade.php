@@ -50,7 +50,7 @@
             // Mobile Sidebar
             // ----
         --}}
-        <flux:sidebar sticky stashable class="border-r border-zinc-200 bg-white px-6 pt-20 pb-12 lg:hidden dark:border-zinc-800 dark:bg-zinc-900">
+        <flux:sidebar sticky stashable class="border-r border-zinc-200 bg-white px-6 pt-20 pb-10 lg:hidden dark:border-zinc-800 dark:bg-zinc-900">
             {{-- See toc.blade.php --}}
             {{ $sidebar }}
         </flux:sidebar>
@@ -79,7 +79,7 @@
 
                     {{-- Right Sidebar: Page Headings --}}
                     <aside class="hidden self-stretch lg:block">
-                        <div class="sticky max-h-[calc(100vh-var(--docs-sticky-top)-2rem)] w-70 overflow-y-auto pl-18" style="top: var(--docs-sticky-top)">
+                        <div class="sticky max-h-[calc(100vh-var(--docs-sticky-top)-2rem)] w-70 overflow-y-auto pl-10" style="top: var(--docs-sticky-top)">
                             {{-- See headings.blade.php --}}
                             {{ $aside }}
                         </div>

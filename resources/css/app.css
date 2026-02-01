@@ -291,3 +291,78 @@
 .dark .prose :where(a):hover {
     color: #38bdf8; /* sky-400 */
 }
+
+/* ----
+ * Docs Page Headings Navigation (Right Sidebar)
+ * Flux docs-style indicator instead of background highlight
+ * ---- */
+
+/* Remove gaps between navlist items for continuous border line */
+[data-flux-navlist] [data-flux-navlist-group] {
+    gap: 0 !important;
+}
+
+/* Style group heading ("On this page") */
+[data-flux-navlist] > div > div.px-3 {
+    padding-left: 0 !important;
+    color: #a1a1aa; /* zinc-400 - soft, matching links */
+    font-size: 0.875rem;
+    font-weight: 400;
+}
+
+/* Reset default Flux navlist item styling */
+[data-flux-navlist] [data-flux-navlist-item] {
+    background: transparent !important;
+    border-radius: 0;
+    border-left: 1px solid #e4e4e7; /* zinc-200 - subtle continuous line */
+    color: #a1a1aa; /* zinc-400 - soft, inviting */
+    font-size: 0.875rem;
+    font-weight: 400;
+    margin: 0 !important;
+    padding-top: 0.375rem;
+    padding-bottom: 0.375rem;
+    transition:
+        border-color 0.2s ease-out,
+        color 0.2s ease-out;
+}
+
+/* Indent h3 subheadings */
+[data-flux-navlist] [data-flux-navlist-item].pl-3 {
+    padding-left: 1.5rem;
+}
+
+/* Active state: darker border + darker text */
+[data-flux-navlist] [data-flux-navlist-item][data-current],
+[data-flux-navlist] [data-flux-navlist-item][data-current='true'] {
+    border-left-color: #18181b !important; /* zinc-900 */
+    color: #18181b !important; /* zinc-900 */
+    font-weight: 500 !important;
+    background: transparent !important;
+}
+
+/* Hover state for inactive items */
+[data-flux-navlist] [data-flux-navlist-item]:not([data-current]):hover {
+    color: #52525b; /* zinc-600 - gentle lift */
+    border-left-color: #71717a; /* zinc-500 - more visible */
+    background: transparent !important;
+}
+
+/* Dark mode adjustments */
+.dark [data-flux-navlist] > div > div.px-3 {
+    color: #a1a1aa; /* zinc-400 - soft, matching links */
+}
+
+.dark [data-flux-navlist] [data-flux-navlist-item] {
+    border-left-color: #52525b; /* zinc-600 */
+    color: #a1a1aa; /* zinc-400 - soft, inviting */
+}
+
+.dark [data-flux-navlist] [data-flux-navlist-item][data-current] {
+    border-left-color: #fafafa !important; /* zinc-50 */
+    color: #fafafa !important; /* zinc-50 */
+}
+
+.dark [data-flux-navlist] [data-flux-navlist-item]:not([data-current]):hover {
+    border-left-color: #a1a1aa; /* zinc-400 - more visible */
+    color: #fafafa; /* zinc-50 - gentle lift */
+}

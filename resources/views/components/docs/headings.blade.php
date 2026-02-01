@@ -8,7 +8,7 @@
             <flux:navlist.group heading="On this page">
                 @foreach ($headings as $heading)
                     @if ($heading['level'] <= 3 && $heading['id'])
-                        <flux:navlist.item href="{{ '#' . $heading['id'] }}" ::data-current="activeId === '{{ $heading['id'] }}'" @class(['pl-3' => $heading['level'] === 2, 'pl-6' => $heading['level'] === 3])>
+                        <flux:navlist.item href="{{ '#' . $heading['id'] }}" ::data-current="activeId === '{{ $heading['id'] }}'" @class(['pl-3' => $heading['level'] === 3])>
                             {{ $heading['text'] }}
                         </flux:navlist.item>
                     @endif
