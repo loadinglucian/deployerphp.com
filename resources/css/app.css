@@ -44,7 +44,7 @@
      * ---- */
 
     --docs-container-padding: 1rem; /* Matches p-4 (mobile default) */
-    --docs-grid-padding-top: 5rem; /* Matches py-20 (80px) */
+    --docs-grid-padding-top: 5rem; /* Offset sticky header height */
     --docs-sticky-top: calc(var(--docs-container-padding) + var(--docs-grid-padding-top));
 }
 

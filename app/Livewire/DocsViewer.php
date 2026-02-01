@@ -52,16 +52,7 @@ final class DocsViewer extends Component
                 return;
             }
 
-            // Fallback: redirect to first doc if README doesn't exist
-            $firstPath = $tocParser->firstDocPath();
-
-            if ($firstPath === null) {
-                throw new HttpResponseException(redirect('/docs/', 301));
-            }
-
-            $this->redirectRoute('docs.show', ['page' => $firstPath]);
-
-            return;
+            throw new HttpResponseException(redirect('/docs/', 301));
         }
 
         // Load the requested document
