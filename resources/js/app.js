@@ -139,3 +139,62 @@ document.addEventListener('livewire:navigated', () => {
     });
 });
 
+// ----
+// Heading Scroll Spy
+// ----
+
+document.addEventListener('alpine:init', () => {
+    Alpine.data('headingsSpy', (headingIds) => ({
+        activeId: headingIds[0] ?? null,
+        observer: null,
+
+        init() {
+            this.setupObserver();
+        },
+
+        setupObserver() {
+            const headings = headingIds.map((id) => document.getElementById(id)).filter((el) => el !== null);
+
+            if (0 === headings.length) {
+                return;
+            }
+
+            // Read sticky header offset from CSS variable (matches scroll-margin-top on headings)
+            // Create temp element to compute the CSS calc() value in pixels
+            const temp = document.createElement('div');
+            temp.style.position = 'absolute';
+            temp.style.top = 'var(--docs-sticky-top, 100px)';
+            document.body.appendChild(temp);
+            const stickyTopPx = parseFloat(getComputedStyle(temp).top) || 100;
+            temp.remove();
+
+            // Trigger when heading crosses just below the sticky header
+            const rootMargin = `-${stickyTopPx}px 0px -80% 0px`;
+
+            this.observer = new IntersectionObserver(
+                (entries) => {
+                    // Find intersecting headings
+                    const intersecting = entries.filter((e) => e.isIntersecting);
+
+                    if (intersecting.length > 0) {
+                        this.activeId = intersecting[0].target.id;
+                    }
+                },
+                { rootMargin, threshold: 0 },
+            );
+
+            headings.forEach((h) => this.observer.observe(h));
+        },
+
+        destroy() {
+            this.observer?.disconnect();
+            this.observer = null;
+        },
+    }));
+});
+
+// Reinitialize scroll spy after Livewire navigation
+document.addEventListener('livewire:navigated', () => {
+    // Dispatch event for Alpine components to reinitialize
+    window.dispatchEvent(new CustomEvent('docs:navigated'));
+});
