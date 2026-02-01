@@ -65,7 +65,7 @@
                 <div class="lg:grid lg:grid-cols-[280px_1fr_280px]">
                     {{-- Left Sidebar: Table of Contents (desktop) --}}
                     <aside class="hidden self-stretch lg:block">
-                        <div class="sticky max-h-[calc(100vh-var(--docs-sticky-top)-2rem)] w-54 overflow-y-auto pr-16" style="top: var(--docs-sticky-top)">
+                        <div class="sticky max-h-[calc(100vh-var(--docs-sticky-top)-2rem)] w-54 overflow-y-auto pr-12" style="top: var(--docs-sticky-top)">
                             {{-- See toc.blade.php --}}
                             {{ $sidebar }}
                         </div>
@@ -79,7 +79,7 @@
 
                     {{-- Right Sidebar: Page Headings --}}
                     <aside class="hidden self-stretch lg:block">
-                        <div class="sticky max-h-[calc(100vh-var(--docs-sticky-top)-2rem)] w-70 overflow-y-auto pl-20" style="top: var(--docs-sticky-top)">
+                        <div class="sticky max-h-[calc(100vh-var(--docs-sticky-top)-2rem)] w-70 overflow-y-auto pl-18" style="top: var(--docs-sticky-top)">
                             {{-- See headings.blade.php --}}
                             {{ $aside }}
                         </div>
