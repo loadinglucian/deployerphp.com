@@ -147,6 +147,7 @@ document.addEventListener('alpine:init', () => {
     Alpine.data('headingsSpy', (headingIds) => ({
         activeId: headingIds[0] ?? null,
         observer: null,
+        initialized: false,
 
         init() {
             this.setupObserver();
@@ -173,11 +174,28 @@ document.addEventListener('alpine:init', () => {
 
             this.observer = new IntersectionObserver(
                 (entries) => {
-                    // Find intersecting headings
-                    const intersecting = entries.filter((e) => e.isIntersecting);
+                    for (const entry of entries) {
+                        const idx = headingIds.indexOf(entry.target.id);
 
-                    if (intersecting.length > 0) {
-                        this.activeId = intersecting[0].target.id;
+                        if (entry.isIntersecting) {
+                            // Heading entered the detection zone
+                            this.activeId = entry.target.id;
+                            this.initialized = true;
+                        } else if (this.initialized) {
+                            // Only process exit events after first intersection
+                            // (avoids activating wrong heading on initial page load)
+                            if (entry.boundingClientRect.top < entry.rootBounds.top) {
+                                // Heading exited through the TOP (scrolled down past it)
+                                // Activate the NEXT heading (if exists)
+                                if (idx < headingIds.length - 1) {
+                                    this.activeId = headingIds[idx + 1];
+                                }
+                            } else {
+                                // Heading exited through the BOTTOM (scrolled up to reveal it)
+                                // Activate THIS heading (it's now the topmost)
+                                this.activeId = entry.target.id;
+                            }
+                        }
                     }
                 },
                 { rootMargin, threshold: 0 },
@@ -189,6 +207,7 @@ document.addEventListener('alpine:init', () => {
         destroy() {
             this.observer?.disconnect();
             this.observer = null;
+            this.initialized = false;
         },
     }));
 });
