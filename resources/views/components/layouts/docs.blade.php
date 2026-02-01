@@ -15,7 +15,7 @@
             // Fixed Header
             // ----
         --}}
-        <flux:header sticky container class="py-3 bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800">
+        <flux:header sticky container class="border-b border-zinc-200 bg-white py-3 dark:border-zinc-800 dark:bg-zinc-900">
             <flux:sidebar.toggle class="lg:hidden" icon="bars-3" inset="left" />
 
             {{-- Colorful Logo --}}
@@ -62,7 +62,7 @@
         --}}
         <flux:main class="p-0!">
             <div class="mx-auto max-w-7xl p-4 sm:p-6">
-                <div class="py-20 lg:grid lg:grid-cols-[280px_1fr_280px]">
+                <div class="lg:grid lg:grid-cols-[280px_1fr_280px]">
                     {{-- Left Sidebar: Table of Contents (desktop) --}}
                     <aside class="hidden self-stretch lg:block">
                         <div class="sticky max-h-[calc(100vh-var(--docs-sticky-top)-2rem)] w-54 overflow-y-auto pr-16" style="top: var(--docs-sticky-top)">
@@ -89,29 +89,5 @@
         </flux:main>
 
         @fluxScripts
-
-        {{-- Debug: SPA Navigation Indicator --}}
-        @if (app()->isLocal())
-            <div
-                x-data="{
-                    sessionId: null,
-                    navCount: 0,
-                    init() {
-                        // Generate session ID only on full page load
-                        if (!window.__spaSessionId) {
-                            window.__spaSessionId = Math.random().toString(36).substring(2, 8);
-                            window.__spaNavCount = 0;
-                        }
-                        this.sessionId = window.__spaSessionId;
-                        this.navCount = ++window.__spaNavCount;
-                    }
-                }"
-                class="fixed bottom-4 right-4 z-50 flex items-center gap-2 rounded-lg bg-zinc-800 px-3 py-2 font-mono text-xs text-white shadow-lg"
-            >
-                <span class="font-semibold text-cyan-400" x-text="'#' + sessionId"></span>
-                <span class="text-zinc-400">|</span>
-                <span>nav: <span class="text-green-400" x-text="navCount"></span></span>
-            </div>
-        @endif
     </body>
 </html>

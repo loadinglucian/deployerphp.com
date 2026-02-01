@@ -52,6 +52,17 @@ final class TocParserService
 
         $this->cachedToc = $this->parseContent($content);
 
+        // Prepend Home entry for README
+        $homeSection = [
+            'name' => '',
+            'anchor' => 'home',
+            'links' => [
+                ['title' => 'Home', 'path' => ''],
+            ],
+        ];
+
+        $this->cachedToc = [$homeSection, ...$this->cachedToc];
+
         return $this->cachedToc;
     }
 
