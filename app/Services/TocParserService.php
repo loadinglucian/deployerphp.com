@@ -52,27 +52,18 @@ final class TocParserService
 
         $this->cachedToc = $this->parseContent($content);
 
+        // Prepend Home entry for README
+        $homeSection = [
+            'name' => '',
+            'anchor' => 'home',
+            'links' => [
+                ['title' => 'Home', 'path' => ''],
+            ],
+        ];
+
+        $this->cachedToc = [$homeSection, ...$this->cachedToc];
+
         return $this->cachedToc;
-    }
-
-    /**
-     * Get the first document path from the TOC.
-     */
-    public function firstDocPath(): ?string
-    {
-        $toc = $this->parse();
-
-        if (count($toc) === 0) {
-            return null;
-        }
-
-        $firstSection = $toc[0];
-
-        if (count($firstSection['links']) === 0) {
-            return null;
-        }
-
-        return $firstSection['links'][0]['path'];
     }
 
     /**

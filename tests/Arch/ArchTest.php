@@ -127,10 +127,10 @@ it('controllers extend base controller when it exists', function (): void {
 });
 
 it('livewire components extend base component when livewire is installed', function (): void {
-    if (class_exists('Livewire\Component')) {
+    if (class_exists(\Livewire\Component::class)) {
         arch()
             ->expect('App\Livewire')
-            ->toExtend('Livewire\Component');
+            ->toExtend(\Livewire\Component::class);
     } else {
         expect(true)->toBeTrue(); // Skip if Livewire not installed
     }
