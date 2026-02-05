@@ -15,7 +15,7 @@
         "league/commonmark": "^2.8",
         "livewire/flux": "^2.11",
         "livewire/flux-pro": "^2.11",
-        "loadinglucian/deployer-php": "^1.0",
+        "loadinglucian/deployer-php": "dev-main",
         "spatie/laravel-data": "^4.19"
     },
     "require-dev": {
@@ -120,9 +120,11 @@
     },
     "minimum-stability": "stable",
     "prefer-stable": true,
-    "repositories": [{
-        "name": "flux-pro",
-        "type": "composer",
-        "url": "https://composer.fluxui.dev"
-    }]
+    "repositories": [
+        {
+            "name": "flux-pro",
+            "type": "composer",
+            "url": "https://composer.fluxui.dev"
+        }
+    ]
 }
