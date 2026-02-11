@@ -104,30 +104,45 @@ final readonly class MarkdownService
      * Convert GitHub-style alerts to styled callout boxes.
      *
      * Transforms blockquotes like:
-     *   > [!TIP]
+     *   > [!INFO]
      *   > Content here
      *
      * Into styled alert boxes with icons using Blade component.
      */
     private function convertGitHubAlerts(string $html): string
     {
-        $alertTypes = ['TIP', 'NOTE', 'WARNING', 'IMPORTANT'];
+        // Pattern:
+        // <blockquote>
+        //   <p>[!TYPE] ...optional first paragraph content...</p>
+        //   ...optional additional block elements (e.g. <p>, <ul>, <pre>)...
+        // </blockquote>
+        return preg_replace_callback(
+            '/<blockquote>\s*<p>\s*\[!(INFO|IMPORTANT)\]\s*(.*?)<\/p>(.*?)<\/blockquote>/is',
+            function (array $matches): string {
+                $type = strtolower(trim($matches[1]));
+                $firstParagraph = trim($matches[2]);
+                $remainingBlocks = trim($matches[3]);
 
-        foreach ($alertTypes as $type) {
-            // Pattern: <blockquote>\n<p>[!TYPE]\nContent...</p>\n</blockquote>
-            $pattern = '/<blockquote>\s*<p>\[!'.$type.'\]\s*(.*?)<\/p>\s*<\/blockquote>/s';
+                $content = '';
+                if ($firstParagraph !== '') {
+                    $content = '<p>'.$firstParagraph.'</p>';
+                }
 
-            $html = preg_replace_callback(
-                $pattern,
-                fn (array $matches): string => view('components.docs.alert', [
-                    'type' => strtolower($type),
-                    'slot' => new HtmlString('<p>'.trim($matches[1]).'</p>'),
-                ])->render(),
-                $html
-            ) ?? $html;
-        }
+                if ($remainingBlocks !== '') {
+                    $content .= $content === '' ? $remainingBlocks : "\n{$remainingBlocks}";
+                }
 
-        return $html;
+                if ($content === '') {
+                    return $matches[0];
+                }
+
+                return view('components.docs.alert', [
+                    'type' => $type,
+                    'slot' => new HtmlString($content),
+                ])->render();
+            },
+            $html
+        ) ?? $html;
     }
 
     /**
