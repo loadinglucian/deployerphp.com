@@ -33,6 +33,7 @@ const extendedBash = (hljs) => {
         'pint',
         // DeployerPHP
         'deployer',
+        'dep',
         // Version control
         'git',
         'gh',
@@ -113,10 +114,10 @@ const extendedBash = (hljs) => {
         match: /\s--?[\w][\w-]*/,
     };
 
-    // Pattern for colon-separated subcommands: server:add, site:deploy
+    // Pattern for colon-separated subcommands: server:add, site:dns:check
     const COLON_SUBCOMMAND_MODE = {
         scope: 'params',
-        match: /[\w-]+:[\w-]+/,
+        match: /[\w-]+(?::[\w-]+)+/,
     };
 
     // Add custom modes to the language's contains array (before existing patterns)
