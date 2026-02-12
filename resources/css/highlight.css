@@ -22,7 +22,7 @@
 .hljs-literal,
 .hljs-section,
 .hljs-link {
-    color: #ec4899; /* pink-500 */
+    color: #f472b6; /* pink-400 */
 }
 
 .hljs-string,
@@ -30,18 +30,18 @@
 .hljs-template-variable,
 .hljs-type,
 .hljs-addition {
-    color: #14b8a6; /* teal-500 */
+    color: #2dd4bf; /* teal-400 */
 }
 
 .hljs-number,
 .hljs-symbol,
 .hljs-bullet,
 .hljs-meta {
-    color: #f97316; /* orange-500 */
+    color: #fb923c; /* orange-400 */
 }
 
 .hljs-built_in {
-    color: #06b6d4; /* cyan-500 */
+    color: #22d3ee; /* cyan-400 */
 }
 
 .hljs-comment,
@@ -53,14 +53,14 @@
 
 .hljs-function,
 .hljs-title.function_ {
-    color: #3b82f6; /* blue-500 */
+    color: #60a5fa; /* blue-400 */
 }
 
 .hljs-variable,
 .hljs-variable.language_,
 .hljs-variable.constant_,
 .hljs-property {
-    color: #8b5cf6; /* violet-500 */
+    color: #a78bfa; /* violet-400 */
 }
 
 .hljs-title.class_,
@@ -80,15 +80,15 @@
 }
 
 .hljs-tag {
-    color: #ec4899; /* pink-500 */
+    color: #f472b6; /* pink-400 */
 }
 
 .hljs-name {
-    color: #ec4899; /* pink-500 */
+    color: #f472b6; /* pink-400 */
 }
 
 .hljs-params {
-    color: #d946ef; /* fuchsia-500 */
+    color: #e879f9; /* fuchsia-400 */
 }
 
 /* ----
@@ -105,7 +105,7 @@
 .dark .hljs-literal,
 .dark .hljs-section,
 .dark .hljs-link {
-    color: #f472b6; /* pink-400 */
+    color: #f9a8d4; /* pink-300 */
 }
 
 .dark .hljs-string,
@@ -113,18 +113,18 @@
 .dark .hljs-template-variable,
 .dark .hljs-type,
 .dark .hljs-addition {
-    color: #2dd4bf; /* teal-400 */
+    color: #5eead4; /* teal-300 */
 }
 
 .dark .hljs-number,
 .dark .hljs-symbol,
 .dark .hljs-bullet,
 .dark .hljs-meta {
-    color: #fb923c; /* orange-400 */
+    color: #fdba74; /* orange-300 */
 }
 
 .dark .hljs-built_in {
-    color: #22d3ee; /* cyan-400 */
+    color: #67e8f9; /* cyan-300 */
 }
 
 .dark .hljs-comment,
@@ -136,14 +136,14 @@
 
 .dark .hljs-function,
 .dark .hljs-title.function_ {
-    color: #60a5fa; /* blue-400 */
+    color: #93c5fd; /* blue-300 */
 }
 
 .dark .hljs-variable,
 .dark .hljs-variable.language_,
 .dark .hljs-variable.constant_,
 .dark .hljs-property {
-    color: #a78bfa; /* violet-400 */
+    color: #c4b5fd; /* violet-300 */
 }
 
 .dark .hljs-title.class_,
@@ -163,13 +163,13 @@
 }
 
 .dark .hljs-tag {
-    color: #f472b6; /* pink-400 */
+    color: #f9a8d4; /* pink-300 */
 }
 
 .dark .hljs-name {
-    color: #f472b6; /* pink-400 */
+    color: #f9a8d4; /* pink-300 */
 }
 
 .dark .hljs-params {
-    color: #e879f9; /* fuchsia-400 */
+    color: #f0abfc; /* fuchsia-300 */
 }
