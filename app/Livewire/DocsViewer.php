@@ -52,14 +52,14 @@ final class DocsViewer extends Component
                 return;
             }
 
-            throw new HttpResponseException(redirect('/docs/', 301));
+            throw new HttpResponseException(redirect('/', 301));
         }
 
         // Load the requested document
         $document = $documentService->load($page);
 
         if ($document === null) {
-            throw new HttpResponseException(redirect('/docs/', 301));
+            throw new HttpResponseException(redirect('/', 301));
         }
 
         $this->page = $page;

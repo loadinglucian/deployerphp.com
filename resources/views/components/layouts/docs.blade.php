@@ -4,6 +4,7 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>DeployerPHP - {{ $title ?? 'Documentation' }}</title>
+        <link rel="icon" type="image/svg+xml" href="{{ asset('logo-mark.svg') }}" />
         <link rel="preconnect" href="https://fonts.bunny.net" />
         <link href="https://fonts.bunny.net/css?family=inter:400,500,600&display=swap" rel="stylesheet" />
         @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -19,17 +20,16 @@
             <flux:sidebar.toggle class="lg:hidden" icon="bars-3" inset="left" />
 
             {{-- Colorful Logo --}}
-            <a href="{{ route('docs.show') }}" wire:navigate class="flex items-center gap-2 font-mono">
-                <span class="text-lg font-bold text-cyan-400">DeployerPHP</span>
-                <span class="hidden w-48 gap-0 sm:flex">
-                    <span class="h-[2px] flex-1 bg-cyan-400"></span>
-                    <span class="h-[2px] flex-1 bg-blue-400"></span>
-                    <span class="h-[2px] flex-1 bg-fuchsia-400"></span>
-                    <span class="h-[2px] flex-1 bg-slate-500 dark:bg-slate-600"></span>
+            <a href="{{ route('home') }}" wire:navigate class="mr-4 flex min-w-0 flex-1 items-center gap-3 font-mono">
+                <img src="{{ asset('logo-mark.svg') }}" alt="" class="size-7 shrink-0" aria-hidden="true" />
+                <span class="font-sans text-lg font-semibold text-cyan-400">DeployerPHP</span>
+                <span class="hidden min-w-0 flex-1 gap-0 sm:flex">
+                    <span class="h-px flex-1 bg-cyan-400"></span>
+                    <span class="h-px flex-1 bg-blue-400"></span>
+                    <span class="h-px flex-1 bg-fuchsia-400"></span>
+                    <span class="h-px flex-1 bg-slate-500 dark:bg-slate-600"></span>
                 </span>
             </a>
-
-            <flux:spacer />
 
             <div class="flex items-center gap-3">
                 {{-- GitHub Button --}}

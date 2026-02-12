@@ -229,7 +229,9 @@ final readonly class MarkdownService
     {
         $pathWithoutFragment = explode('#', $href, 2)[0];
 
-        return str_starts_with($pathWithoutFragment, '/docs/')
+        return $pathWithoutFragment === '/docs'
+            || $pathWithoutFragment === 'docs'
+            || str_starts_with($pathWithoutFragment, '/docs/')
             || str_starts_with($pathWithoutFragment, 'docs/');
     }
 
@@ -248,6 +250,10 @@ final readonly class MarkdownService
         // Remove .md extension if present
         if (str_ends_with($href, '.md')) {
             $href = substr($href, 0, -3);
+        }
+
+        if ($href === '/docs' || $href === 'docs' || $href === '/docs/') {
+            return "/{$fragment}";
         }
 
         // Normalize: ensure leading slash if missing

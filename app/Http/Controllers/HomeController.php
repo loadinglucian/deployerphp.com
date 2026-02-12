@@ -13,6 +13,6 @@ final class HomeController extends Controller
      */
     public function __invoke(): RedirectResponse
     {
-        return redirect()->route('docs.show');
+        return redirect('/');
     }
 }

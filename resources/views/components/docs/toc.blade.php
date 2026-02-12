@@ -7,7 +7,7 @@
     <flux:navlist.group heading="Guides">
         @foreach ($toc as $section)
             @foreach ($section['links'] as $link)
-                <flux:navlist.item href="{{ '' === $link['path'] ? route('docs.show') : route('docs.show', ['page' => $link['path']]) }}" wire:navigate :current="$link['path'] === $currentPath">
+                <flux:navlist.item href="{{ '' === $link['path'] ? route('home') : route('docs.show', ['page' => $link['path']]) }}" wire:navigate :current="$link['path'] === $currentPath">
                     {{ $link['title'] }}
                 </flux:navlist.item>
             @endforeach
