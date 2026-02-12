@@ -21,7 +21,8 @@
 
             {{-- Colorful Logo --}}
             <a href="{{ route('home') }}" wire:navigate class="mr-4 flex min-w-0 flex-1 items-center gap-3 font-mono">
-                <img src="{{ asset('logo-mark.svg') }}" alt="" class="size-7 shrink-0" aria-hidden="true" />
+                <img src="{{ asset('logo-mark.svg') }}" alt="" class="size-7 shrink-0 dark:hidden" aria-hidden="true" />
+                <img src="{{ asset('logo-mark-dark.svg') }}" alt="" class="hidden size-7 shrink-0 dark:block" aria-hidden="true" />
                 <span class="font-sans text-lg font-semibold text-cyan-400">DeployerPHP</span>
                 <span class="hidden min-w-0 flex-1 gap-0 sm:flex">
                     <span class="h-px flex-1 bg-cyan-400"></span>
