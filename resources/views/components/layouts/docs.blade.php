@@ -61,7 +61,7 @@
             // ----
         --}}
         <flux:main class="p-0!">
-            <div class="mx-auto max-w-7xl p-4 sm:p-6">
+            <div class="mx-auto max-w-7xl px-6 py-4 sm:py-6 lg:px-8">
                 <div class="lg:grid lg:grid-cols-[280px_1fr_280px]">
                     {{-- Left Sidebar: Table of Contents (desktop) --}}
                     <aside class="hidden self-stretch lg:block">

@@ -44,12 +44,12 @@
      * Sidebar initial position = container padding + grid padding
      * ---- */
 
-    --docs-container-padding: 1rem; /* Matches p-4 (mobile default) */
+    --docs-container-padding: 1rem; /* Matches py-4 (mobile default) */
     --docs-grid-padding-top: 5rem; /* Offset sticky header height */
     --docs-sticky-top: calc(var(--docs-container-padding) + var(--docs-grid-padding-top));
 }
 
-/* Desktop: container padding increases to p-6 (1.5rem) */
+/* Desktop: vertical container padding increases to py-6 (1.5rem) */
 @media (min-width: 640px) {
     :root {
         --docs-container-padding: 1.5rem;
