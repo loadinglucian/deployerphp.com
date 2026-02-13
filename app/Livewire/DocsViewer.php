@@ -10,6 +10,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 #[Layout('components.layouts.docs')]
 final class DocsViewer extends Component
@@ -52,14 +53,14 @@ final class DocsViewer extends Component
                 return;
             }
 
-            throw new HttpResponseException(redirect('/', 301));
+            throw new HttpResponseException(new RedirectResponse('/', 301));
         }
 
         // Load the requested document
         $document = $documentService->load($page);
 
         if ($document === null) {
-            throw new HttpResponseException(redirect('/', 301));
+            throw new HttpResponseException(new RedirectResponse('/', 301));
         }
 
         $this->page = $page;
