@@ -86,7 +86,7 @@
                                             <span class="ml-1 text-xs text-zinc-400 dark:text-zinc-500">
                                                 alias:
                                                 @foreach ($command['aliases'] as $alias)
-                                                    <code class="font-mono text-fuchsia-600 dark:text-fuchsia-400">{{ $alias }}</code>
+                                                    <code class="font-mono text-fuchsia-600 dark:text-fuchsia-400">{{ $alias }}</code>@if (! $loop->last), @endif
                                                 @endforeach
                                             </span>
                                         @endif

@@ -149,17 +149,22 @@ final readonly class CommandCheatSheetService
 
         $attribute = $attributeMatches[1];
 
-        if (preg_match("/name:\\s*'([^']+)'/", $attribute, $nameMatches) !== 1) {
+        if (preg_match('/name:\s*(?:\'([^\']+)\'|"([^"]+)")/', $attribute, $nameMatches) !== 1) {
             return null;
         }
 
-        preg_match("/description:\\s*'([^']+)'/", $attribute, $descriptionMatches);
+        $commandNames = $nameMatches[1] !== '' ? $nameMatches[1] : $nameMatches[2];
+        $description = '';
+
+        if (preg_match('/description:\s*(?:\'([^\']+)\'|"([^"]+)")/', $attribute, $descriptionMatches) === 1) {
+            $description = $descriptionMatches[1] !== '' ? $descriptionMatches[1] : $descriptionMatches[2];
+        }
 
         $names = array_values(
             array_filter(
                 array_map(
                     trim(...),
-                    explode('|', $nameMatches[1])
+                    explode('|', $commandNames)
                 ),
                 static fn (string $name): bool => $name !== '',
             ),
@@ -174,7 +179,7 @@ final readonly class CommandCheatSheetService
         return [
             'primary' => $primary,
             'aliases' => $names,
-            'description' => $descriptionMatches[1] ?? '',
+            'description' => $description,
         ];
     }
 
