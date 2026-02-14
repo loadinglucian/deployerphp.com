@@ -17,7 +17,7 @@ MARKDOWN;
 
     $html = app(MarkdownService::class)->toHtml($markdown);
 
-    expect(substr_count($html, 'border-l-amber-400'))->toBe(1)
+    expect(substr_count($html, 'dark:border-l-amber-400'))->toBe(1)
         ->and(substr_count($html, '<svg'))->toBe(1)
         ->and($html)->toContain('<ul>')
         ->toContain('<li>First item</li>')
@@ -35,6 +35,6 @@ MARKDOWN;
 
     $html = app(MarkdownService::class)->toHtml($markdown);
 
-    expect(substr_count($html, 'border-l-amber-400'))->toBe(2)
+    expect(substr_count($html, 'dark:border-l-amber-400'))->toBe(2)
         ->and(substr_count($html, '<svg'))->toBe(2);
 });
