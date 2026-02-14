@@ -74,12 +74,12 @@
                             <ul class="space-y-1.5">
                                 @foreach ($group['commands'] as $command)
                                     <li title="{{ $command['description'] }}">
-                                        @if ($command['link'])
-                                            <a href="{{ route('docs.show', ['page' => $command['link']['page']]) }}#{{ $command['link']['anchor'] }}" class="text-accent underline-offset-2 hover:underline dark:text-blue-400">
-                                                <code class="font-mono text-sm">{{ $command['primary'] }}</code>
-                                            </a>
-                                        @else
-                                            <code class="font-mono text-sm text-zinc-900 dark:text-zinc-100">{{ $command['primary'] }}</code>
+                                        <code class="font-mono text-sm text-zinc-900 dark:text-zinc-100">{{ $command['primary'] }}</code>
+
+                                        @if ($command['links'] !== [])
+                                            @foreach ($command['links'] as $index => $link)
+                                                <a href="{{ route('docs.show', ['page' => $link['page']]) }}#{{ $link['anchor'] }}" class="inline-flex items-center justify-center size-4 rounded-sm bg-accent/10 text-[10px] font-medium leading-none text-accent no-underline hover:bg-accent/20 dark:bg-blue-400/10 dark:text-blue-400 dark:hover:bg-blue-400/20" title="{{ $link['page'] }}#{{ $link['anchor'] }}">{{ $index + 1 }}</a>
+                                            @endforeach
                                         @endif
 
                                         @if ($command['aliases'] !== [])

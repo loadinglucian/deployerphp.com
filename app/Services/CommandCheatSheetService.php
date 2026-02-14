@@ -22,7 +22,7 @@ final readonly class CommandCheatSheetService
      *             primary: string,
      *             aliases: array<int, string>,
      *             description: string,
-     *             link: array{page: string, anchor: string}|null
+     *             links: array<int, array{page: string, anchor: string}>
      *         }>
      *     }>,
      *     commandCount: int,
@@ -37,7 +37,7 @@ final readonly class CommandCheatSheetService
         $aliasCount = 0;
 
         foreach ($commands as $command) {
-            $command['link'] = $links[$command['primary']] ?? null;
+            $command['links'] = $links[$command['primary']] ?? [];
             $namespace = $this->extractNamespace($command['primary']);
 
             if (! array_key_exists($namespace, $groups)) {
@@ -67,7 +67,7 @@ final readonly class CommandCheatSheetService
      *     primary: string,
      *     aliases: array<int, string>,
      *     description: string,
-     *     link?: array{page: string, anchor: string}|null
+     *     links?: array<int, array{page: string, anchor: string}>
      * }>
      */
     private function discoverCommands(): array
@@ -181,7 +181,7 @@ final readonly class CommandCheatSheetService
     /**
      * Scan documentation markdown files to map commands to their doc sections.
      *
-     * @return array<string, array{page: string, anchor: string}>
+     * @return array<string, array<int, array{page: string, anchor: string}>>
      */
     private function resolveCommandLinks(): array
     {
@@ -199,7 +199,8 @@ final readonly class CommandCheatSheetService
 
         sort($files);
 
-        $links = [];
+        /** @var array<string, array<string, array{page: string, anchor: string}>> $seen */
+        $seen = [];
 
         foreach ($files as $file) {
             $page = basename($file, '.md');
@@ -227,17 +228,25 @@ final readonly class CommandCheatSheetService
 
                 if (preg_match_all('/deployer\s+([a-z][a-z0-9:]+)\b/', $line, $commandMatches) !== 0) {
                     foreach ($commandMatches[1] as $commandName) {
-                        if (array_key_exists($commandName, $links)) {
-                            continue;
+                        $key = $page.'#'.$currentAnchor;
+
+                        if (! array_key_exists($commandName, $seen)) {
+                            $seen[$commandName] = [];
                         }
 
-                        $links[$commandName] = [
+                        $seen[$commandName][$key] = [
                             'page' => $page,
                             'anchor' => $currentAnchor,
                         ];
                     }
                 }
             }
+        }
+
+        $links = [];
+
+        foreach ($seen as $commandName => $references) {
+            $links[$commandName] = array_values($references);
         }
 
         return $links;
