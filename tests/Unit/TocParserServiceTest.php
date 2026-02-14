@@ -6,8 +6,6 @@ use App\Services\DocsPathService;
 use App\Services\TocParserService;
 
 it('parses grouped toc sections and maps readme links to root path', function (): void {
-    ensureDocsPathConfigured();
-
     $toc = new TocParserService(new DocsPathService)->parse();
 
     expect($toc)->toHaveCount(2)

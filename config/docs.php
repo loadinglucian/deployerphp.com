@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'path' => env('DOCS_PATH'),
+    'path' => env('DOCS_PATH', 'vendor/loadinglucian/deployer-php/docs'),
 
     /*
     |--------------------------------------------------------------------------

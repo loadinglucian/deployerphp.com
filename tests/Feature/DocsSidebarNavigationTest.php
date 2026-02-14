@@ -7,8 +7,6 @@ use App\Services\DocumentService;
 use App\Services\TocParserService;
 
 it('renders grouped sidebar navigation from documentation toc', function (): void {
-    ensureDocsPathConfigured();
-
     app()->forgetInstance(DocsPathService::class);
     app()->forgetInstance(TocParserService::class);
     app()->forgetInstance(DocumentService::class);
@@ -35,8 +33,6 @@ it('renders grouped sidebar navigation from documentation toc', function (): voi
 });
 
 it('redirects missing docs pages to the docs home', function (): void {
-    ensureDocsPathConfigured();
-
     app()->forgetInstance(DocsPathService::class);
     app()->forgetInstance(TocParserService::class);
     app()->forgetInstance(DocumentService::class);

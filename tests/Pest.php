@@ -54,28 +54,3 @@ function something()
 {
     // ..
 }
-
-function ensureDocsPathConfigured(): string
-{
-    $configuredPath = config('docs.path');
-
-    if (is_string($configuredPath) && $configuredPath !== '') {
-        return $configuredPath;
-    }
-
-    $envContent = file_get_contents(base_path('.env'));
-
-    if ($envContent === false) {
-        throw new RuntimeException('Unable to read .env file to resolve DOCS_PATH.');
-    }
-
-    if (preg_match("/^DOCS_PATH=(?:\"([^\"]+)\"|'([^']+)'|([^\r\n#]+))/m", $envContent, $matches) !== 1) {
-        throw new RuntimeException('DOCS_PATH is not configured in tests or .env.');
-    }
-
-    $docsPath = trim($matches[1] ?: $matches[2] ?: $matches[3]);
-
-    config(['docs.path' => $docsPath]);
-
-    return $docsPath;
-}

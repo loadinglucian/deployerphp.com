@@ -6,8 +6,6 @@ use App\Services\CommandCheatSheetService;
 use App\Services\DocsPathService;
 
 it('renders the command cheat sheet with discovered commands', function (): void {
-    ensureDocsPathConfigured();
-
     app()->forgetInstance(DocsPathService::class);
     app()->forgetInstance(CommandCheatSheetService::class);
 
