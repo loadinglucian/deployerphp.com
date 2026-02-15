@@ -52,17 +52,6 @@ final class TocParserService
 
         $this->cachedToc = $this->parseContent($content);
 
-        // Prepend Home entry for README
-        $homeSection = [
-            'name' => '',
-            'anchor' => 'home',
-            'links' => [
-                ['title' => 'Home', 'path' => ''],
-            ],
-        ];
-
-        $this->cachedToc = [$homeSection, ...$this->cachedToc];
-
         return $this->cachedToc;
     }
 
@@ -84,7 +73,11 @@ final class TocParserService
         foreach ($lines as $line) {
             // Match section anchor: <a name="section-name"></a>
             if (preg_match('/<a\s+name="([^"]+)"><\/a>/', $line, $anchorMatch) === 1) {
-                if ($currentSection !== null) {
+                if ($currentSection !== null && $currentSection['links'] !== []) {
+                    if ($currentSection['name'] === '') {
+                        $currentSection['name'] = 'Documentation';
+                    }
+
                     $sections[] = $currentSection;
                 }
 
@@ -98,7 +91,11 @@ final class TocParserService
             }
 
             // Match section header: ## Section Name
-            if ($currentSection !== null && preg_match('/^##\s+(.+)$/', $line, $headerMatch) === 1) {
+            if (
+                $currentSection !== null
+                && $currentSection['name'] === ''
+                && preg_match('/^##\s+(.+)$/', $line, $headerMatch) === 1
+            ) {
                 $currentSection['name'] = trim($headerMatch[1]);
 
                 continue;
@@ -123,7 +120,11 @@ final class TocParserService
         }
 
         // Don't forget the last section
-        if ($currentSection !== null) {
+        if ($currentSection !== null && $currentSection['links'] !== []) {
+            if ($currentSection['name'] === '') {
+                $currentSection['name'] = 'Documentation';
+            }
+
             $sections[] = $currentSection;
         }
 
@@ -137,9 +138,16 @@ final class TocParserService
      */
     private function normalizePath(string $path): string
     {
+        $path = explode('#', $path, 2)[0];
+        $path = explode('?', $path, 2)[0];
+
         // Remove .md extension
         if (str_ends_with($path, '.md')) {
             $path = substr($path, 0, -3);
+        }
+
+        if (strtolower(basename($path)) === 'readme') {
+            return '';
         }
 
         // Extract just the filename (flatten nested paths)

@@ -16,7 +16,20 @@ return [
     |
     */
 
-    'path' => env('DOCS_PATH'),
+    'path' => env('DOCS_PATH', 'vendor/loadinglucian/deployer-php/docs'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Cheat Sheet
+    |--------------------------------------------------------------------------
+    |
+    | Cache TTL for the command cheat sheet payload in seconds.
+    |
+    */
+
+    'cheat_sheet' => [
+        'cache_ttl_seconds' => (int) env('DOCS_CHEAT_SHEET_CACHE_TTL', 300),
+    ],
 
     /*
     |--------------------------------------------------------------------------
