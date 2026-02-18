@@ -33,8 +33,6 @@
             </a>
 
             <div class="flex items-center gap-3">
-                <flux:button size="sm" href="{{ route('cheat-sheet') }}">Cheat Sheet</flux:button>
-
                 {{-- GitHub Button --}}
                 <flux:button icon="github" size="sm" href="https://github.com/loadinglucian/deployer-php/" target="_blank">GitHub</flux:button>
 
