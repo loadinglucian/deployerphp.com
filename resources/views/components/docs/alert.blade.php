@@ -25,7 +25,7 @@
     };
 @endphp
 
-<div class="{{ $styles['container'] }} flex flex-col gap-2 border-l-2 bg-zinc-100/50 px-3 py-2 dark:bg-zinc-800">
+<div class="{{ $styles['container'] }} my-6 flex flex-col gap-2 border-l-2 bg-zinc-100/50 px-3 py-2 dark:bg-zinc-800">
     <div class="{{ $styles['icon'] }}">
         @switch($normalizedType)
             @case('info')
