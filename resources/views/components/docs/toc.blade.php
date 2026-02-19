@@ -13,7 +13,7 @@
             @endforeach
 
             @if ($loop->last)
-                <flux:navlist.item href="{{ route('cheat-sheet') }}" target="_blank">
+                <flux:navlist.item href="{{ route('cheat-sheet') }}" wire:navigate>
                     <div class="flex items-center gap-2">
                         <span>Cheat Sheet</span>
 

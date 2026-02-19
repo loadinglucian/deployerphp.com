@@ -65,7 +65,7 @@
     --tw-prose-headings: #18181b; /* zinc-900 */
     --tw-prose-links: #2299dd; /* accent */
     --tw-prose-code: #d946ef; /* fuchsia-600 */
-    --tw-prose-pre-bg: #f4f4f5; /* zinc-100 */
+    --tw-prose-pre-bg: #f4f4f590; /* zinc-100 */
     --tw-prose-pre-code: #3f3f46; /* zinc-700 */
     --tw-prose-counters: #71717a; /* zinc-500 */
     --tw-prose-bullets: #a1a1aa; /* zinc-400 */
@@ -160,6 +160,7 @@
     padding: 2rem 12px 12px;
     margin-top: 1.5rem;
     margin-bottom: 1.5rem;
+    line-height: 1.1;
 }
 
 .prose :where(pre code) {
@@ -168,7 +169,6 @@
     font-size: 0.875rem;
     font-weight: 400;
     color: inherit;
-    line-height: 1.2rem;
 }
 
 .prose :where(ul) {

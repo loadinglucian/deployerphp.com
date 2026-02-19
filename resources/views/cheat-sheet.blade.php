@@ -12,124 +12,85 @@
     </head>
     <body class="min-h-screen bg-white text-zinc-700 dark:bg-zinc-900 dark:text-zinc-300">
         {{-- Header (matches docs layout) --}}
-        <flux:header sticky container class="z-11 border-b border-zinc-200 bg-white py-3 dark:border-zinc-800 dark:bg-zinc-900">
-            <a href="{{ route('home') }}" class="mr-4 flex min-w-0 flex-1 items-center gap-3 font-mono">
-                <img src="{{ asset('logo-mark.svg') }}" alt="" class="size-7 shrink-0 dark:hidden" aria-hidden="true" />
-                <img src="{{ asset('logo-mark-dark.svg') }}" alt="" class="hidden size-7 shrink-0 dark:block" aria-hidden="true" />
-                <span class="font-sans text-lg font-semibold text-cyan-400">DeployerPHP</span>
-                <span class="hidden min-w-0 flex-1 gap-0 sm:flex">
-                    <span class="h-px flex-1 bg-cyan-400"></span>
-                    <span class="h-px flex-1 bg-blue-400"></span>
-                    <span class="h-px flex-1 bg-fuchsia-400"></span>
-                    <span class="h-px flex-1 bg-slate-500 dark:bg-slate-600"></span>
-                </span>
-            </a>
-
-            <div class="flex items-center gap-3">
-                <flux:button size="sm" href="{{ route('cheat-sheet') }}" variant="primary">Cheat Sheet</flux:button>
-                <flux:button icon="github" size="sm" href="https://github.com/loadinglucian/deployer-php/" target="_blank">GitHub</flux:button>
-
-                <flux:separator vertical class="my-2 ml-3" />
-
-                <flux:button x-data variant="subtle" square aria-label="Toggle color scheme" x-on:click="$flux.appearance = $flux.dark ? 'light' : 'dark'">
-                    <flux:icon.moon x-cloak x-show="! $flux.dark" class="size-5" />
-                    <flux:icon.sun x-cloak x-show="$flux.dark" class="size-5" />
-                </flux:button>
-            </div>
-        </flux:header>
+        <x-docs.header />
 
         {{-- Main Content --}}
         <flux:main class="p-0!">
-            <div class="mx-auto max-w-7xl px-6 py-8 sm:py-10 lg:px-8">
+            <div class="mx-auto max-w-7xl px-6 py-4 sm:py-6 lg:px-8">
                 {{-- Page Header --}}
-                <header class="mb-8">
+                <header class="mb-6">
                     <h1 class="text-2xl font-semibold text-zinc-900 dark:text-zinc-50">Command Cheat Sheet</h1>
-                    <p class="mt-2 flex items-center gap-3 text-sm text-zinc-500 dark:text-zinc-400">
-                        <span><strong class="font-semibold text-zinc-700 dark:text-zinc-200">{{ $commandCount }}</strong> commands</span>
-                        <span aria-hidden="true" class="text-zinc-300 dark:text-zinc-600">&middot;</span>
-                        <span><strong class="font-semibold text-zinc-700 dark:text-zinc-200">{{ $aliasCount }}</strong> aliases</span>
+                    <p class="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
+                        <strong class="font-semibold text-zinc-700 dark:text-zinc-200">{{ $commandCount }}</strong>
+                        commands organized by deployment workflow.
                     </p>
                 </header>
 
                 {{-- Global Options Hint --}}
                 <div class="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-zinc-200 bg-zinc-50 px-4 py-2.5 text-sm text-zinc-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400">
-                    <span>Prefix commands with <code class="rounded bg-zinc-200/60 px-1.5 py-0.5 font-mono text-xs text-zinc-800 dark:bg-zinc-700/60 dark:text-zinc-200">deployer</code> (or your alias).</span>
+                    <span>
+                        Prefix commands with
+                        <code class="rounded bg-zinc-200/60 px-1.5 py-0.5 font-mono text-xs text-fuchsia-600 dark:bg-zinc-700/60 dark:text-fuchsia-400">deployer</code>
+                        in your terminal.
+                    </span>
                     <span class="flex flex-wrap items-center gap-1.5">
                         Global options:
-                        <code class="rounded bg-zinc-200/60 px-1.5 py-0.5 font-mono text-xs text-zinc-800 dark:bg-zinc-700/60 dark:text-zinc-200">--env</code>
-                        <code class="rounded bg-zinc-200/60 px-1.5 py-0.5 font-mono text-xs text-zinc-800 dark:bg-zinc-700/60 dark:text-zinc-200">--inventory</code>
-                        <code class="rounded bg-zinc-200/60 px-1.5 py-0.5 font-mono text-xs text-zinc-800 dark:bg-zinc-700/60 dark:text-zinc-200">--quiet</code>
+                        <code class="rounded bg-zinc-200/60 px-1.5 py-0.5 font-mono text-xs text-fuchsia-600 dark:bg-zinc-700/60 dark:text-fuchsia-400">--env</code>
+                        <code class="rounded bg-zinc-200/60 px-1.5 py-0.5 font-mono text-xs text-fuchsia-600 dark:bg-zinc-700/60 dark:text-fuchsia-400">--inventory</code>
+                        <code class="rounded bg-zinc-200/60 px-1.5 py-0.5 font-mono text-xs text-fuchsia-600 dark:bg-zinc-700/60 dark:text-fuchsia-400">--quiet</code>
                     </span>
                 </div>
 
-                {{-- Command Groups Grid --}}
-                <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="All DeployerPHP commands">
-                    @foreach ($groups as $group)
-                        <article class="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-800/50">
-                            <h2 class="mb-3 flex items-baseline gap-1.5 text-xs font-semibold uppercase tracking-wide text-accent dark:text-blue-400">
-                                {{ $group['name'] }}
-                                <span class="text-zinc-400 dark:text-zinc-500">({{ $group['count'] }})</span>
-                            </h2>
+                {{-- Command Groups By Related Documentation Area --}}
+                @if ($sections !== [])
+                    <div class="space-y-10" aria-label="DeployerPHP commands grouped by related documentation area">
+                        @foreach ($sections as $section)
+                            @php
+                                $sectionDescription = match ($section['name']) {
+                                    'Server & Site Operations' => 'Core commands for provisioning hosts, managing sites, and handling routine server maintenance.',
+                                    'Scheduling & Process Control' => 'Tools for defining scheduled jobs and managing long-running background workers.',
+                                    'Web Runtime Services' => 'Commands for configuring and controlling the web stack, including PHP and Nginx services.',
+                                    'Data Services' => 'Operational commands for databases and cache layers used by deployed applications.',
+                                    'Scaffolding' => 'Generators and setup helpers that bootstrap common deployment resources and project structure.',
+                                    'Cloud Providers' => 'Provider-specific commands for creating and managing infrastructure across supported cloud platforms.',
+                                    default => 'Supporting commands for specialized tasks that do not fit a primary operations category.',
+                                };
+                            @endphp
 
-                            <ul class="space-y-1.5">
-                                @foreach ($group['commands'] as $command)
-                                    <li title="{{ $command['description'] }}">
-                                        <code class="font-mono text-sm text-zinc-900 dark:text-zinc-100">{{ $command['primary'] }}</code>
+                            <section>
+                                <header class="mb-4 border-b border-zinc-200 pb-2 dark:border-zinc-700">
+                                    <h2 class="text-lg font-semibold text-zinc-900 dark:text-zinc-50">{{ $section['name'] }}</h2>
+                                    <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400">{{ $sectionDescription }}</p>
+                                </header>
 
-                                        @if ($command['links'] !== [])
-                                            @foreach ($command['links'] as $index => $link)
-                                                <a href="{{ route('docs.show', ['page' => $link['page']]) }}#{{ $link['anchor'] }}" class="inline-flex items-center justify-center size-4 rounded-sm bg-accent/10 text-[10px] font-medium leading-none text-accent no-underline hover:bg-accent/20 dark:bg-blue-400/10 dark:text-blue-400 dark:hover:bg-blue-400/20" title="{{ $link['page'] }}#{{ $link['anchor'] }}">{{ $index + 1 }}</a>
-                                            @endforeach
-                                        @endif
+                                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                                    @foreach ($section['groups'] as $group)
+                                        <article class="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-800/50">
+                                            <h3 class="mb-3 flex items-baseline gap-1.5 text-sm font-semibold text-zinc-900 dark:text-zinc-50">
+                                                {{ $group['name'] }}
+                                                <span class="text-xs font-normal text-zinc-400 dark:text-zinc-500">({{ $group['count'] }})</span>
+                                            </h3>
 
-                                        @if ($command['aliases'] !== [])
-                                            <span class="ml-1 text-xs text-zinc-400 dark:text-zinc-500">
-                                                alias:
-                                                @foreach ($command['aliases'] as $alias)
-                                                    <code class="font-mono text-fuchsia-600 dark:text-fuchsia-400">{{ $alias }}</code>@if (! $loop->last), @endif
+                                            <ul class="space-y-1.5">
+                                                @foreach ($group['commands'] as $command)
+                                                    <li title="{{ $command['description'] }}">
+                                                        <code class="rounded bg-zinc-100/80 px-1 py-0.5 font-mono text-sm text-fuchsia-600 dark:bg-zinc-800/80 dark:text-fuchsia-400">{{ $command['primary'] }}</code>
+                                                    </li>
                                                 @endforeach
-                                            </span>
-                                        @endif
-                                    </li>
-                                @endforeach
-                            </ul>
-                        </article>
-                    @endforeach
-                </section>
+                                            </ul>
+                                        </article>
+                                    @endforeach
+                                </div>
+                            </section>
+                        @endforeach
+                    </div>
+                @else
+                    <p class="text-sm text-zinc-500 dark:text-zinc-400">No commands were discovered for the configured docs path.</p>
+                @endif
             </div>
 
             {{-- Footer (matches docs layout) --}}
-            <footer class="my-10 flex flex-col gap-6 p-6 text-center text-sm text-zinc-700/60 dark:border-zinc-800 dark:text-zinc-300/60">
-                <div class="flex items-center justify-center gap-1">
-                    <a href="https://github.com/loadinglucian/deployer-php/" target="_blank" rel="noopener" aria-label="View on GitHub" class="inline-flex items-center justify-center rounded-md p-2 text-zinc-500 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white">
-                        <flux:icon.github class="size-5" />
-                        <span class="sr-only">GitHub</span>
-                    </a>
-
-                    <a href="https://www.reddit.com/r/DeployerPHP/" target="_blank" rel="noopener" aria-label="Follow on Reddit" class="inline-flex items-center justify-center rounded-md p-2 text-zinc-500 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white">
-                        <flux:icon.reddit class="size-5" />
-                        <span class="sr-only">Reddit</span>
-                    </a>
-
-                    <a href="https://x.com/loadinglucian" target="_blank" rel="noopener" aria-label="Follow on X" class="inline-flex items-center justify-center rounded-md p-2 text-zinc-500 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white">
-                        <flux:icon.x class="size-5" />
-                        <span class="sr-only">X</span>
-                    </a>
-                </div>
-
-                <p>
-                    <span>Made with tender love</span>
-                    <svg class="inline-flex shrink-0 text-zinc-400 [:where(&amp;)]:size-4" data-flux-icon="" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" data-slot="icon">
-                        <path d="M2 6.342a3.375 3.375 0 0 1 6-2.088 3.375 3.375 0 0 1 5.997 2.26c-.063 2.134-1.618 3.76-2.955 4.784a14.437 14.437 0 0 1-2.676 1.61c-.02.01-.038.017-.05.022l-.014.006-.004.002h-.002a.75.75 0 0 1-.592.001h-.002l-.004-.003-.015-.006a5.528 5.528 0 0 1-.232-.107 14.395 14.395 0 0 1-2.535-1.557C3.564 10.22 1.999 8.558 1.999 6.38L2 6.342Z"></path>
-                    </svg>
-                    <span>and care</span>
-                    <a href="https://www.google.com/search?q=bucharest+romania" class="underline underline-offset-4" target="_blank" rel="noopener">in Bucharest, Romania</a>
-                </p>
-                <p>
-                    &copy; {{ now()->year }}
-                    <a href="https://x.com/loadinglucian" class="underline underline-offset-4" target="_blank" rel="noopener">Lucian V&#259;c&#259;roiu</a>
-                </p>
-            </footer>
+            <x-docs.footer />
         </flux:main>
 
         @fluxScripts

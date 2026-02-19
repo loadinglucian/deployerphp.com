@@ -24,6 +24,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | Cache TTL for the command cheat sheet payload in seconds.
+    | Set this to 0 (or a negative value) to disable caching.
     |
     */
 

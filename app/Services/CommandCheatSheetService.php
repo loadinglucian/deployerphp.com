@@ -15,14 +15,27 @@ final readonly class CommandCheatSheetService
 
     /**
      * @return array{
+     *     sections: array<int, array{
+     *         name: string,
+     *         count: int,
+     *         namespaceCount: int,
+     *         groups: array<int, array{
+     *             name: string,
+     *             count: int,
+     *             commands: array<int, array{
+     *                 primary: string,
+     *                 aliases: array<int, string>,
+     *                 description: string
+     *             }>
+     *         }>
+     *     }>,
      *     groups: array<int, array{
      *         name: string,
      *         count: int,
      *         commands: array<int, array{
      *             primary: string,
      *             aliases: array<int, string>,
-     *             description: string,
-     *             links: array<int, array{page: string, anchor: string}>
+     *             description: string
      *         }>
      *     }>,
      *     commandCount: int,
@@ -32,17 +45,15 @@ final readonly class CommandCheatSheetService
     public function build(): array
     {
         $commands = $this->discoverCommands();
-        $links = $this->resolveCommandLinks();
         $groups = [];
         $aliasCount = 0;
 
         foreach ($commands as $command) {
-            $command['links'] = $links[$command['primary']] ?? [];
             $namespace = $this->extractNamespace($command['primary']);
 
             if (! array_key_exists($namespace, $groups)) {
                 $groups[$namespace] = [
-                    'name' => ucfirst($namespace),
+                    'name' => $this->formatNamespaceName($namespace),
                     'count' => 0,
                     'commands' => [],
                 ];
@@ -54,8 +65,10 @@ final readonly class CommandCheatSheetService
         }
 
         ksort($groups);
+        $sections = $this->buildRelatedSections($groups);
 
         return [
+            'sections' => $sections,
             'groups' => array_values($groups),
             'commandCount' => count($commands),
             'aliasCount' => $aliasCount,
@@ -66,8 +79,7 @@ final readonly class CommandCheatSheetService
      * @return array<int, array{
      *     primary: string,
      *     aliases: array<int, string>,
-     *     description: string,
-     *     links?: array<int, array{page: string, anchor: string}>
+     *     description: string
      * }>
      */
     private function discoverCommands(): array
@@ -183,89 +195,6 @@ final readonly class CommandCheatSheetService
         ];
     }
 
-    /**
-     * Scan documentation markdown files to map commands to their doc sections.
-     *
-     * @return array<string, array<int, array{page: string, anchor: string}>>
-     */
-    private function resolveCommandLinks(): array
-    {
-        $docsPath = $this->docsPath->path();
-
-        if (! is_dir($docsPath)) {
-            return [];
-        }
-
-        $files = glob($docsPath.'/*.md');
-
-        if ($files === false) {
-            return [];
-        }
-
-        sort($files);
-
-        /** @var array<string, array<string, array{page: string, anchor: string}>> $seen */
-        $seen = [];
-
-        foreach ($files as $file) {
-            $page = basename($file, '.md');
-
-            if ($page === 'documentation' || $page === 'README') {
-                continue;
-            }
-
-            $content = file_get_contents($file);
-
-            if ($content === false) {
-                continue;
-            }
-
-            $currentAnchor = null;
-
-            foreach (explode("\n", $content) as $line) {
-                if (preg_match('/^#{2,3}\s+(.+)$/', $line, $headingMatch) === 1) {
-                    $currentAnchor = $this->slugify($headingMatch[1]);
-                }
-
-                if ($currentAnchor === null) {
-                    continue;
-                }
-
-                if (preg_match_all('/deployer\s+([a-z][a-z0-9:]+)\b/', $line, $commandMatches) !== 0) {
-                    foreach ($commandMatches[1] as $commandName) {
-                        $key = $page.'#'.$currentAnchor;
-
-                        if (! array_key_exists($commandName, $seen)) {
-                            $seen[$commandName] = [];
-                        }
-
-                        $seen[$commandName][$key] = [
-                            'page' => $page,
-                            'anchor' => $currentAnchor,
-                        ];
-                    }
-                }
-            }
-        }
-
-        $links = [];
-
-        foreach ($seen as $commandName => $references) {
-            $links[$commandName] = array_values($references);
-        }
-
-        return $links;
-    }
-
-    private function slugify(string $text): string
-    {
-        $slug = mb_strtolower($text);
-        $slug = (string) preg_replace('/[^a-z0-9\s-]/', '', $slug);
-        $slug = (string) preg_replace('/[\s-]+/', '-', $slug);
-
-        return trim($slug, '-');
-    }
-
     private function extractNamespace(string $command): string
     {
         $segments = explode(':', $command, 2);
@@ -275,5 +204,128 @@ final readonly class CommandCheatSheetService
         }
 
         return $segments[0];
+    }
+
+    private function formatNamespaceName(string $namespace): string
+    {
+        return match ($namespace) {
+            'aws' => 'AWS',
+            'cf' => 'Cloudflare',
+            'do' => 'DigitalOcean',
+            'mariadb' => 'MariaDB',
+            'php' => 'PHP',
+            'postgresql' => 'PostgreSQL',
+            default => ucfirst($namespace),
+        };
+    }
+
+    /**
+     * @param array<string, array{
+     *     name: string,
+     *     count: int,
+     *     commands: array<int, array{
+     *         primary: string,
+     *         aliases: array<int, string>,
+     *         description: string
+     *     }>
+     * }> $groups
+     * @return array<int, array{
+     *     name: string,
+     *     count: int,
+     *     namespaceCount: int,
+     *     groups: array<int, array{
+     *         name: string,
+     *         count: int,
+     *         commands: array<int, array{
+     *             primary: string,
+     *             aliases: array<int, string>,
+     *             description: string
+     *         }>
+     *     }>
+     * }>
+     */
+    private function buildRelatedSections(array $groups): array
+    {
+        /** @var array<string, array{
+         *     name: string,
+         *     count: int,
+         *     namespaceCount: int,
+         *     groups: array<int, array{
+         *         name: string,
+         *         count: int,
+         *         commands: array<int, array{
+         *             primary: string,
+         *             aliases: array<int, string>,
+         *             description: string
+         *         }>
+         *     }>
+         * }> $sections
+         */
+        $sections = [];
+
+        foreach ($groups as $namespace => $group) {
+            $sectionName = $this->resolveNamespaceSection($namespace);
+
+            if (! array_key_exists($sectionName, $sections)) {
+                $sections[$sectionName] = [
+                    'name' => $sectionName,
+                    'count' => 0,
+                    'namespaceCount' => 0,
+                    'groups' => [],
+                ];
+            }
+
+            $sections[$sectionName]['groups'][] = $group;
+            $sections[$sectionName]['count'] += $group['count'];
+            $sections[$sectionName]['namespaceCount']++;
+        }
+
+        $orderedSections = [];
+
+        foreach ($this->sectionOrder() as $sectionName) {
+            if (! array_key_exists($sectionName, $sections)) {
+                continue;
+            }
+
+            $orderedSections[] = $sections[$sectionName];
+            unset($sections[$sectionName]);
+        }
+
+        if ($sections !== []) {
+            foreach ($sections as $section) {
+                $orderedSections[] = $section;
+            }
+        }
+
+        return $orderedSections;
+    }
+
+    private function resolveNamespaceSection(string $namespace): string
+    {
+        return match ($namespace) {
+            'server', 'site' => 'Server & Site Operations',
+            'cron', 'supervisor' => 'Scheduling & Process Control',
+            'nginx', 'php' => 'Web Runtime Services',
+            'mariadb', 'postgresql', 'redis', 'memcached' => 'Data Services',
+            'scaffold' => 'Scaffolding',
+            'aws', 'cf', 'do' => 'Cloud Providers',
+            default => 'Other',
+        };
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function sectionOrder(): array
+    {
+        return [
+            'Server & Site Operations',
+            'Scheduling & Process Control',
+            'Web Runtime Services',
+            'Data Services',
+            'Scaffolding',
+            'Cloud Providers',
+            'Other',
+        ];
     }
 }

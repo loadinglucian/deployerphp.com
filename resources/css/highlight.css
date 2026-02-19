@@ -47,7 +47,7 @@
 .hljs-comment,
 .hljs-quote,
 .hljs-deletion {
-    color: #71717a; /* zinc-500 */
+    color: #a1a1aa; /* zinc-400 */
     font-style: italic;
 }
 
