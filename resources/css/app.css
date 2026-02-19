@@ -160,7 +160,7 @@
     padding: 2rem 12px 12px;
     margin-top: 1.5rem;
     margin-bottom: 1.5rem;
-    line-height: 1.1;
+    line-height: 1.25;
 }
 
 .prose :where(pre code) {
