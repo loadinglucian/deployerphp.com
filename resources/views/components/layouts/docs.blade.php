@@ -73,7 +73,7 @@
                     </aside>
 
                     {{-- Main Content --}}
-                    <main class="min-w-0 lg:max-w-[720px]">
+                    <main class="min-h-[calc(100vh-var(--docs-sticky-top)-2rem)] min-w-0 lg:max-w-[720px]">
                         {{-- See content.blade.php --}}
                         {{ $slot }}
                     </main>
