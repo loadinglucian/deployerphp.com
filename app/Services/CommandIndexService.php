@@ -7,7 +7,7 @@ namespace App\Services;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
-final readonly class CommandCheatSheetService
+final readonly class CommandIndexService
 {
     public function __construct(
         private DocsPathService $docsPath,

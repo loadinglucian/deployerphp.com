@@ -1,6 +1,6 @@
 <?php
 
-use App\Livewire\CheatSheet;
+use App\Livewire\CommandIndex;
 use App\Livewire\DocsViewer;
 use Illuminate\Support\Facades\Route;
 
@@ -11,4 +11,4 @@ Route::get('/docs/{page}', DocsViewer::class)
     ->name('docs.show')
     ->where(['page' => '[a-z0-9-]+']);
 
-Route::get('/cheat-sheet', CheatSheet::class)->name('cheat-sheet');
+Route::get('/command-index', CommandIndex::class)->name('command-index');

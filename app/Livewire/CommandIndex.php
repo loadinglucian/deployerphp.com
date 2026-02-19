@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
-use App\Services\CommandCheatSheetService;
+use App\Services\CommandIndexService;
+use App\Services\TocParserService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Cache;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
-#[Layout('components.layouts.cheat-sheet')]
-final class CheatSheet extends Component
+#[Layout('components.layouts.command-index')]
+final class CommandIndex extends Component
 {
     /**
      * @var array<int, array{
@@ -48,9 +49,20 @@ final class CheatSheet extends Component
 
     public int $aliasCount = 0;
 
-    public function mount(CommandCheatSheetService $sheet): void
+    /**
+     * @var array<int, array{
+     *     name: string,
+     *     anchor: string,
+     *     links: array<int, array{title: string, path: string}>
+     * }>
+     */
+    public array $toc = [];
+
+    public function mount(TocParserService $tocParser, CommandIndexService $sheet): void
     {
-        $cacheTtlSeconds = (int) config('docs.cheat_sheet.cache_ttl_seconds', 300);
+        $this->toc = $tocParser->parse();
+
+        $cacheTtlSeconds = (int) config('docs.command_index.cache_ttl_seconds', 300);
         $cacheEnabled = ! app()->isLocal() && $cacheTtlSeconds > 0;
 
         /** @var array{
@@ -79,24 +91,24 @@ final class CheatSheet extends Component
          *     }>,
          *     commandCount: int,
          *     aliasCount: int
-         * } $cheatSheet
+         * } $commandIndex
          */
-        $cheatSheet = $cacheEnabled
+        $commandIndex = $cacheEnabled
             ? Cache::remember(
-                'cheat_sheet:v2',
+                'command_index:v2',
                 now()->addSeconds($cacheTtlSeconds),
                 fn (): array => $sheet->build(),
             )
             : $sheet->build();
 
-        $this->sections = $cheatSheet['sections'];
-        $this->groups = $cheatSheet['groups'];
-        $this->commandCount = $cheatSheet['commandCount'];
-        $this->aliasCount = $cheatSheet['aliasCount'];
+        $this->sections = $commandIndex['sections'];
+        $this->groups = $commandIndex['groups'];
+        $this->commandCount = $commandIndex['commandCount'];
+        $this->aliasCount = $commandIndex['aliasCount'];
     }
 
     public function render(): View
     {
-        return view('livewire.cheat-sheet');
+        return view('livewire.command-index');
     }
 }

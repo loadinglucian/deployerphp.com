@@ -20,16 +20,16 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Cheat Sheet
+    | Command Index
     |--------------------------------------------------------------------------
     |
-    | Cache TTL for the command cheat sheet payload in seconds.
+    | Cache TTL for the command index payload in seconds.
     | Set this to 0 (or a negative value) to disable caching.
     |
     */
 
-    'cheat_sheet' => [
-        'cache_ttl_seconds' => (int) env('DOCS_CHEAT_SHEET_CACHE_TTL', 300),
+    'command_index' => [
+        'cache_ttl_seconds' => (int) env('DOCS_COMMAND_INDEX_CACHE_TTL', 300),
     ],
 
     /*

@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>DeployerPHP - Command Cheat Sheet</title>
+        <title>DeployerPHP - Command Index</title>
         <link rel="icon" type="image/svg+xml" href="{{ asset('logo-mark.svg') }}" />
         <link rel="preconnect" href="https://fonts.bunny.net" />
         <link href="https://fonts.bunny.net/css?family=inter:400,500,600&display=swap" rel="stylesheet" />
@@ -19,7 +19,7 @@
             <div class="mx-auto max-w-7xl px-6 py-4 sm:py-6 lg:px-8">
                 {{-- Page Header --}}
                 <header class="mb-6">
-                    <h1 class="text-2xl font-semibold text-zinc-900 dark:text-zinc-50">Command Cheat Sheet</h1>
+                    <h1 class="text-2xl font-semibold text-zinc-900 dark:text-zinc-50">Command Index</h1>
                     <p class="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
                         <strong class="font-semibold text-zinc-700 dark:text-zinc-200">{{ $commandCount }}</strong>
                         commands organized by deployment workflow.

@@ -26,6 +26,8 @@ it('renders grouped sidebar navigation from documentation toc', function (): voi
             'Managing Databases',
             'Cloud Providers',
             'Automation & AI',
+            'Index',
+            'Command Index',
         ])
         ->assertSee('href="'.route('home').'"', false)
         ->assertSee('href="'.route('docs.show', ['page' => 'installation']).'"', false)
@@ -35,8 +37,8 @@ it('renders grouped sidebar navigation from documentation toc', function (): voi
 
     expect($content)->not->toBeFalse();
     expect((string) $content)
-        ->toMatch('/<a[^>]*href="'.preg_quote(route('cheat-sheet'), '/').'"[^>]*wire:navigate(?:="")?[^>]*>/')
-        ->not->toMatch('/<a[^>]*href="'.preg_quote(route('cheat-sheet'), '/').'"[^>]*target="_blank"[^>]*>/');
+        ->toMatch('/<a[^>]*href="'.preg_quote(route('command-index'), '/').'"[^>]*wire:navigate(?:="")?[^>]*>/')
+        ->not->toMatch('/<a[^>]*href="'.preg_quote(route('command-index'), '/').'"[^>]*target="_blank"[^>]*>/');
 });
 
 it('redirects missing docs pages to the docs home', function (): void {
