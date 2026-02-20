@@ -19,7 +19,7 @@ final readonly class DocsOutputCacheService
     public function key(string $namespace, array $segments = []): string
     {
         $normalizedSegments = array_map(
-            fn (mixed $segment): string => $this->normalizeSegment($segment),
+            $this->normalizeSegment(...),
             $segments,
         );
 
