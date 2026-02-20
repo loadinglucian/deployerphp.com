@@ -1,6 +1,6 @@
 <x-slot:sidebar>
     <x-docs.toc :toc="$toc" current-path="command-index" />
-</x-slot:sidebar>
+</x-slot>
 
 <div>
     <article class="docs-prose prose max-w-none">
@@ -10,20 +10,6 @@
             commands organized by deployment workflow.
         </p>
     </article>
-
-    <div class="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-zinc-200 bg-zinc-50 px-4 py-2.5 text-sm text-zinc-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400">
-        <span>
-            Prefix commands with
-            <code class="rounded bg-zinc-200/60 px-1.5 py-0.5 font-mono text-xs text-fuchsia-600 dark:bg-zinc-700/60 dark:text-fuchsia-400">deployer</code>
-            in your terminal.
-        </span>
-        <span class="flex flex-wrap items-center gap-1.5">
-            Global options:
-            <code class="rounded bg-zinc-200/60 px-1.5 py-0.5 font-mono text-xs text-fuchsia-600 dark:bg-zinc-700/60 dark:text-fuchsia-400">--env</code>
-            <code class="rounded bg-zinc-200/60 px-1.5 py-0.5 font-mono text-xs text-fuchsia-600 dark:bg-zinc-700/60 dark:text-fuchsia-400">--inventory</code>
-            <code class="rounded bg-zinc-200/60 px-1.5 py-0.5 font-mono text-xs text-fuchsia-600 dark:bg-zinc-700/60 dark:text-fuchsia-400">--quiet</code>
-        </span>
-    </div>
 
     @if ($sections !== [])
         <div class="space-y-10" aria-label="DeployerPHP commands grouped by related documentation area">

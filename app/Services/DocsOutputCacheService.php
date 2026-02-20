@@ -13,6 +13,9 @@ final readonly class DocsOutputCacheService
         private Filesystem $files,
     ) {}
 
+    /**
+     * @param  array<array-key, mixed>  $segments
+     */
     public function key(string $namespace, array $segments = []): string
     {
         $normalizedSegments = array_map(
