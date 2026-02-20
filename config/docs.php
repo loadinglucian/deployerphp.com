@@ -20,16 +20,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Command Index
+    | Docs Output Cache
     |--------------------------------------------------------------------------
     |
-    | Cache TTL for the command index payload in seconds.
-    | Set this to 0 (or a negative value) to disable caching.
+    | Shared output cache for docs pages and command index payloads.
+    | This cache is file-backed and can be cleared via optimize:clear.
     |
     */
 
-    'command_index' => [
-        'cache_ttl_seconds' => (int) env('DOCS_COMMAND_INDEX_CACHE_TTL', 300),
+    'cache' => [
+        'enabled' => (bool) env('DOCS_CACHE_ENABLED', env('APP_ENV', 'local') !== 'local'),
+        'path' => env('DOCS_CACHE_PATH', storage_path('framework/cache/docs-output')),
+        'version' => env('DOCS_CACHE_VERSION', 'v1'),
+        'lock_timeout_seconds' => (int) env('DOCS_CACHE_LOCK_TIMEOUT_SECONDS', 5),
     ],
 
     /*
