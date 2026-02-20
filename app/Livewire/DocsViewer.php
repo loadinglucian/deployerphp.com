@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
+use App\Services\DocsOutputCacheService;
 use App\Services\DocumentService;
 use App\Services\TocParserService;
 use Illuminate\Contracts\View\View;
@@ -34,43 +35,108 @@ final class DocsViewer extends Component
     public array $toc = [];
 
     public function mount(
+        DocsOutputCacheService $docsOutputCache,
         TocParserService $tocParser,
         DocumentService $documentService,
         ?string $page = null,
     ): void {
-        $this->toc = $tocParser->parse();
+        $routeIdentity = $page === null || $page === '' ? 'home' : "docs:{$page}";
 
-        // No page specified - show README or redirect to first doc
+        /** @var array{
+         *     page: string,
+         *     title: string,
+         *     content: string,
+         *     headings: array<int, array{level: int, text: string, id: string}>,
+         *     toc: array<int, array{
+         *         name: string,
+         *         anchor: string,
+         *         links: array<int, array{title: string, path: string}>
+         *     }>
+         * } $payload
+         */
+        $payload = $docsOutputCache->remember(
+            $docsOutputCache->key('docs-viewer', [$routeIdentity]),
+            fn (): array => $this->buildPayload($tocParser, $documentService, $page),
+        );
+
+        $this->hydrateFromPayload($payload);
+    }
+
+    public function render(): View
+    {
+        return view('livewire.docs-viewer');
+    }
+
+    /**
+     * @return array{
+     *     page: string,
+     *     title: string,
+     *     content: string,
+     *     headings: array<int, array{level: int, text: string, id: string}>,
+     *     toc: array<int, array{
+     *         name: string,
+     *         anchor: string,
+     *         links: array<int, array{title: string, path: string}>
+     *     }>
+     * }
+     */
+    private function buildPayload(
+        TocParserService $tocParser,
+        DocumentService $documentService,
+        ?string $page,
+    ): array {
+        $toc = $tocParser->parse();
+
         if ($page === null || $page === '') {
             $readme = $documentService->loadReadme();
 
-            if ($readme !== null) {
-                $this->title = $readme['title'];
-                $this->content = $readme['content'];
-                $this->headings = $readme['headings'];
-                $this->page = '';
-
-                return;
+            if ($readme === null) {
+                throw new HttpResponseException(new RedirectResponse('/', 301));
             }
 
-            throw new HttpResponseException(new RedirectResponse('/', 301));
+            return [
+                'page' => '',
+                'title' => $readme['title'],
+                'content' => $readme['content'],
+                'headings' => $readme['headings'],
+                'toc' => $toc,
+            ];
         }
 
-        // Load the requested document
         $document = $documentService->load($page);
 
         if ($document === null) {
             throw new HttpResponseException(new RedirectResponse('/', 301));
         }
 
-        $this->page = $page;
-        $this->title = $document['title'];
-        $this->content = $document['content'];
-        $this->headings = $document['headings'];
+        return [
+            'page' => $page,
+            'title' => $document['title'],
+            'content' => $document['content'],
+            'headings' => $document['headings'],
+            'toc' => $toc,
+        ];
     }
 
-    public function render(): View
+    /**
+     * @param  array{
+     *     page: string,
+     *     title: string,
+     *     content: string,
+     *     headings: array<int, array{level: int, text: string, id: string}>,
+     *     toc: array<int, array{
+     *         name: string,
+     *         anchor: string,
+     *         links: array<int, array{title: string, path: string}>
+     *     }>
+     * }  $payload
+     */
+    private function hydrateFromPayload(array $payload): void
     {
-        return view('livewire.docs-viewer');
+        $this->page = $payload['page'];
+        $this->title = $payload['title'];
+        $this->content = $payload['content'];
+        $this->headings = $payload['headings'];
+        $this->toc = $payload['toc'];
     }
 }

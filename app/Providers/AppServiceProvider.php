@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Services\DocsOutputCacheService;
 use App\Services\DocsPathService;
 use App\Services\DocumentService;
 use App\Services\HeadingExtractorService;
@@ -20,6 +21,7 @@ final class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(DocsPathService::class);
+        $this->app->singleton(DocsOutputCacheService::class);
         $this->app->singleton(MarkdownService::class);
         $this->app->singleton(TocParserService::class);
         $this->app->singleton(HeadingExtractorService::class);
@@ -31,6 +33,6 @@ final class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $this->optimizes(clear: 'docs:clear', key: 'docs');
     }
 }

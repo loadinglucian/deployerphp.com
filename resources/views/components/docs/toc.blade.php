@@ -11,16 +11,10 @@
                     {{ $link['title'] }}
                 </flux:navlist.item>
             @endforeach
-
-            @if ($loop->last)
-                <flux:navlist.item href="{{ route('cheat-sheet') }}" target="_blank">
-                    <div class="flex items-center gap-2">
-                        <span>Cheat Sheet</span>
-
-                        <flux:icon.square-arrow-out-up-right class="size-3" />
-                    </div>
-                </flux:navlist.item>
-            @endif
         </flux:navlist.group>
     @endforeach
+
+    <flux:navlist.group heading="Index">
+        <flux:navlist.item href="{{ route('command-index') }}" wire:navigate :current="$currentPath === 'command-index'">Command Index</flux:navlist.item>
+    </flux:navlist.group>
 </flux:navlist>

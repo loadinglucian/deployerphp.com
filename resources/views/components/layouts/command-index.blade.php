@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>DeployerPHP - {{ $title ?? 'Documentation' }}</title>
+        <title>DeployerPHP - Command Index</title>
         <link rel="icon" type="image/svg+xml" href="{{ asset('logo-mark.svg') }}" />
         <link rel="preconnect" href="https://fonts.bunny.net" />
         <link href="https://fonts.bunny.net/css?family=inter:400,500,600&display=swap" rel="stylesheet" />
@@ -24,7 +24,6 @@
             // ----
         --}}
         <flux:sidebar sticky stashable class="border-r border-zinc-200 bg-white px-6 pt-20 pb-10 lg:hidden dark:border-zinc-800 dark:bg-zinc-900">
-            {{-- See toc.blade.php --}}
             {{ $sidebar }}
         </flux:sidebar>
 
@@ -35,30 +34,18 @@
         --}}
         <flux:main class="p-0!">
             <div class="mx-auto max-w-7xl px-6 py-4 sm:py-6 lg:px-8">
-                <div class="lg:grid lg:grid-cols-[280px_1fr_280px]">
-                    {{-- Left Sidebar: Table of Contents (desktop) --}}
+                <div class="lg:grid lg:grid-cols-[280px_1fr]">
                     <aside class="hidden self-stretch lg:block">
                         <div class="sticky max-h-[calc(100vh-var(--docs-sticky-top)-2rem)] w-54 overflow-y-auto pr-12" style="top: var(--docs-sticky-top)">
-                            {{-- See toc.blade.php --}}
                             {{ $sidebar }}
                         </div>
                     </aside>
 
-                    {{-- Main Content --}}
-                    <main class="min-h-[calc(100vh-var(--docs-sticky-top)-2rem)] min-w-0 lg:max-w-[720px]">
-                        {{-- See content.blade.php --}}
+                    <main class="min-h-[calc(100vh-var(--docs-sticky-top)-2rem)] min-w-0">
                         {{ $slot }}
 
                         <x-docs.footer />
                     </main>
-
-                    {{-- Right Sidebar: Page Headings --}}
-                    <aside class="hidden self-stretch lg:block">
-                        <div class="sticky max-h-[calc(100vh-var(--docs-sticky-top)-2rem)] w-70 overflow-y-auto pl-10" style="top: var(--docs-sticky-top)">
-                            {{-- See headings.blade.php --}}
-                            {{ $aside }}
-                        </div>
-                    </aside>
                 </div>
             </div>
         </flux:main>

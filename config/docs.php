@@ -20,15 +20,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Cheat Sheet
+    | Docs Output Cache
     |--------------------------------------------------------------------------
     |
-    | Cache TTL for the command cheat sheet payload in seconds.
+    | Shared output cache for docs pages and command index payloads.
+    | This cache is file-backed and can be cleared via optimize:clear.
     |
     */
 
-    'cheat_sheet' => [
-        'cache_ttl_seconds' => (int) env('DOCS_CHEAT_SHEET_CACHE_TTL', 300),
+    'cache' => [
+        'enabled' => (bool) env('DOCS_CACHE_ENABLED', env('APP_ENV', 'local') !== 'local'),
+        'path' => env('DOCS_CACHE_PATH', storage_path('framework/cache/docs-output')),
+        'version' => env('DOCS_CACHE_VERSION', 'v1'),
+        'lock_timeout_seconds' => (int) env('DOCS_CACHE_LOCK_TIMEOUT_SECONDS', 5),
     ],
 
     /*

@@ -4,24 +4,91 @@ declare(strict_types=1);
 
 use App\Services\DocsPathService;
 use App\Services\TocParserService;
+use Illuminate\Support\Facades\File;
+use Tests\Concerns\UsesDocsFixtures;
 
-it('parses grouped toc sections and maps readme links to root path', function (): void {
-    $toc = new TocParserService(new DocsPathService)->parse();
+uses(UsesDocsFixtures::class);
 
-    expect($toc)->toHaveCount(2)
-        ->and($toc[0]['name'])->toBe('Guides')
-        ->and($toc[0]['links'])->toBe([
-            ['title' => 'Introduction', 'path' => ''],
-            ['title' => 'Installation', 'path' => 'installation'],
-            ['title' => 'Zero to Deploy', 'path' => 'zero-to-deploy'],
-        ])
-        ->and($toc[1]['name'])->toBe('References')
-        ->and($toc[1]['links'])->toBe([
-            ['title' => 'Managing Sites', 'path' => 'managing-sites'],
-            ['title' => 'Managing Servers', 'path' => 'managing-servers'],
-            ['title' => 'Managing Services', 'path' => 'managing-services'],
-            ['title' => 'Managing Databases', 'path' => 'managing-databases'],
-            ['title' => 'Cloud Providers', 'path' => 'cloud-providers'],
-            ['title' => 'Automation & AI', 'path' => 'automation'],
-        ]);
+beforeEach(function (): void {
+    $this->configureDocsFixtures();
+});
+
+it('parses grouped toc sections from fixture docs', function (): void {
+    $toc = app(TocParserService::class)->parse();
+
+    expect($toc)->toBe([
+        [
+            'name' => 'Guides',
+            'anchor' => 'guides',
+            'links' => [
+                ['title' => 'Introduction', 'path' => ''],
+                ['title' => 'Installation', 'path' => 'installation'],
+                ['title' => 'Link Behavior', 'path' => 'link-behavior'],
+            ],
+        ],
+        [
+            'name' => 'References',
+            'anchor' => 'references',
+            'links' => [
+                ['title' => 'Command Index', 'path' => 'command-index'],
+                ['title' => 'Operations', 'path' => 'runbooks'],
+            ],
+        ],
+    ]);
+});
+
+it('returns an empty toc when documentation file is missing', function (): void {
+    config()->set('docs.path', storage_path('framework/testing/missing-docs-'.uniqid('', true)));
+    app()->forgetInstance(DocsPathService::class);
+    app()->forgetInstance(TocParserService::class);
+
+    expect(app(TocParserService::class)->parse())->toBe([]);
+});
+
+it('parses flat toc links into the default documentation section', function (): void {
+    $docsPath = storage_path('framework/testing/docs-flat-'.uniqid('', true));
+
+    File::ensureDirectoryExists($docsPath);
+    File::put("{$docsPath}/documentation.md", "- [Readme](README.md)\n- [Guide](guides/guide.md)\n");
+
+    config()->set('docs.path', $docsPath);
+    app()->forgetInstance(DocsPathService::class);
+    app()->forgetInstance(TocParserService::class);
+
+    $toc = app(TocParserService::class)->parse();
+
+    expect($toc)->toBe([
+        [
+            'name' => 'Documentation',
+            'anchor' => 'documentation',
+            'links' => [
+                ['title' => 'Readme', 'path' => ''],
+                ['title' => 'Guide', 'path' => 'guide'],
+            ],
+        ],
+    ]);
+
+    File::deleteDirectory($docsPath);
+});
+
+it('memoizes parsed toc values per service instance', function (): void {
+    $docsPath = storage_path('framework/testing/docs-memoized-'.uniqid('', true));
+    File::ensureDirectoryExists($docsPath);
+    File::put("{$docsPath}/documentation.md", "- [Original](original.md)\n");
+
+    config()->set('docs.path', $docsPath);
+    app()->forgetInstance(DocsPathService::class);
+    app()->forgetInstance(TocParserService::class);
+
+    $service = app(TocParserService::class);
+
+    $first = $service->parse();
+
+    File::put("{$docsPath}/documentation.md", "- [Changed](changed.md)\n");
+
+    $second = $service->parse();
+
+    expect($second)->toBe($first);
+
+    File::deleteDirectory($docsPath);
 });

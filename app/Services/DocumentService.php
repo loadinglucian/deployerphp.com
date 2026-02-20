@@ -10,6 +10,7 @@ final readonly class DocumentService
         private DocsPathService $docsPath,
         private MarkdownService $markdown,
         private HeadingExtractorService $headingExtractor,
+        private DocsOutputCacheService $docsOutputCache,
     ) {}
 
     /**
@@ -25,25 +26,7 @@ final readonly class DocumentService
     {
         $filePath = sprintf('%s/%s.md', $this->docsPath->path(), $page);
 
-        if (! file_exists($filePath)) {
-            return null;
-        }
-
-        $content = file_get_contents($filePath);
-
-        if ($content === false) {
-            return null;
-        }
-
-        $html = $this->markdown->toHtml($content);
-        $headings = $this->headingExtractor->extract($html);
-        $title = $this->extractTitle($html, $page);
-
-        return [
-            'title' => $title,
-            'content' => $html,
-            'headings' => $headings,
-        ];
+        return $this->loadFromPath($filePath, "page:{$page}", $page);
     }
 
     /**
@@ -59,8 +42,37 @@ final readonly class DocumentService
     {
         $filePath = dirname($this->docsPath->path()).'/README.md';
 
+        return $this->loadFromPath($filePath, 'readme', 'README');
+    }
+
+    /**
+     * @return array{
+     *     title: string,
+     *     content: string,
+     *     headings: array<int, array{level: int, text: string, id: string}>
+     * }|null
+     */
+    private function loadFromPath(string $filePath, string $documentIdentity, string $titleFallback): ?array
+    {
         if (! file_exists($filePath)) {
             return null;
+        }
+
+        $cacheKey = $this->docsOutputCache->key('document', [
+            $documentIdentity,
+            $this->fingerprint($filePath),
+        ]);
+
+        $cached = $this->docsOutputCache->get($cacheKey);
+
+        if (is_array($cached)) {
+            /** @var array{
+             *     title: string,
+             *     content: string,
+             *     headings: array<int, array{level: int, text: string, id: string}>
+             * } $cached
+             */
+            return $cached;
         }
 
         $content = file_get_contents($filePath);
@@ -71,13 +83,25 @@ final readonly class DocumentService
 
         $html = $this->markdown->toHtml($content);
         $headings = $this->headingExtractor->extract($html);
-        $title = $this->extractTitle($html, 'README');
+        $title = $this->extractTitle($html, $titleFallback);
 
-        return [
+        $document = [
             'title' => $title,
             'content' => $html,
             'headings' => $headings,
         ];
+
+        $this->docsOutputCache->put($cacheKey, $document);
+
+        return $document;
+    }
+
+    private function fingerprint(string $path): string
+    {
+        $modifiedAt = filemtime($path);
+        $size = filesize($path);
+
+        return sprintf('%d:%d', $modifiedAt === false ? 0 : $modifiedAt, $size === false ? 0 : $size);
     }
 
     /**

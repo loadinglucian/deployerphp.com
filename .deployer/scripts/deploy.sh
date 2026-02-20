@@ -126,8 +126,8 @@ if [[ $framework == "laravel" ]]; then
 	# ----
 
 	echo "→ Optimizing..."
+	"${DEPLOYER_PHP}" artisan optimize:clear
 	"${DEPLOYER_PHP}" artisan optimize
-
 fi
 
 # Symfony (uncomment as needed)
