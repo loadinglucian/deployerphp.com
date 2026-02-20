@@ -81,7 +81,7 @@ final readonly class DocumentService
             return null;
         }
 
-        $html = $this->markdown->toHtml($content);
+        $html = $this->markdown->toHtml($content, $documentIdentity === 'readme' ? null : $titleFallback, $filePath);
         $headings = $this->headingExtractor->extract($html);
         $title = $this->extractTitle($html, $titleFallback);
 

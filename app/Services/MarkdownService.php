@@ -45,15 +45,18 @@ final readonly class MarkdownService
     /**
      * Convert markdown to HTML with GitHub-style alert boxes, code block wrappers, and link transformation.
      */
-    public function toHtml(string $markdown, ?string $currentSection = null): string
-    {
+    public function toHtml(
+        string $markdown,
+        ?string $currentSection = null,
+        ?string $sourceFilePath = null,
+    ): string {
         $markdown = $this->stripMarkdownArtifacts($markdown);
         $html = $this->converter->convert($markdown)->getContent();
         $html = $this->stripContentBeforeH1($html);
         $html = $this->convertGitHubAlerts($html);
         $html = $this->wrapCodeBlocks($html);
 
-        return $this->transformLinks($html, $currentSection);
+        return $this->transformLinks($html, $currentSection, $sourceFilePath);
     }
 
     /**
@@ -178,11 +181,11 @@ final readonly class MarkdownService
      * Converts links like `section/file.md` or `/docs/section/page` to full
      * GitHub URLs pointing to the source repository.
      */
-    private function transformLinks(string $html, ?string $currentSection): string
+    private function transformLinks(string $html, ?string $currentSection, ?string $sourceFilePath): string
     {
         return preg_replace_callback(
             '/<a\s+href="([^"]+)"([^>]*)>/i',
-            fn (array $matches): string => $this->transformLink($matches, $currentSection),
+            fn (array $matches): string => $this->transformLink($matches, $currentSection, $sourceFilePath),
             $html
         ) ?? $html;
     }
@@ -195,7 +198,7 @@ final readonly class MarkdownService
      *
      * @param  array<int, string>  $matches
      */
-    private function transformLink(array $matches, ?string $currentSection): string
+    private function transformLink(array $matches, ?string $currentSection, ?string $sourceFilePath): string
     {
         $href = $matches[1];
         $attributes = $matches[2];
@@ -212,6 +215,12 @@ final readonly class MarkdownService
             return sprintf('<a href="%s"%s>', $internalUrl, $attributes);
         }
 
+        $relativeDocsUrl = $this->resolveRelativeDocsUrl($href, $sourceFilePath);
+
+        if ($relativeDocsUrl !== null) {
+            return sprintf('<a href="%s"%s>', $relativeDocsUrl, $attributes);
+        }
+
         // All other links → GitHub with target="_blank"
         $githubUrl = $this->resolveGitHubUrl($href, $currentSection);
 
@@ -220,6 +229,84 @@ final readonly class MarkdownService
             $githubUrl,
             $attributes
         );
+    }
+
+    private function resolveRelativeDocsUrl(string $href, ?string $sourceFilePath): ?string
+    {
+        if ($sourceFilePath === null || str_starts_with($href, '/')) {
+            return null;
+        }
+
+        [$path, $fragment] = $this->splitFragment($href);
+
+        if ($path === '' || preg_match('/^[a-z][a-z0-9+.-]*:/i', $path) === 1) {
+            return null;
+        }
+
+        $docsDirectory = config('docs.path');
+
+        if (! is_string($docsDirectory) || $docsDirectory === '') {
+            return null;
+        }
+
+        $absoluteDocsDirectory = str_starts_with($docsDirectory, '/')
+            ? $docsDirectory
+            : base_path($docsDirectory);
+
+        $resolvedDocsDirectory = realpath($absoluteDocsDirectory);
+        $resolvedSourcePath = realpath($sourceFilePath);
+
+        if ($resolvedDocsDirectory === false || $resolvedSourcePath === false) {
+            return null;
+        }
+
+        $sourceDirectory = dirname($resolvedSourcePath);
+        $candidatePath = $path;
+
+        if (! str_ends_with($candidatePath, '.md')) {
+            $candidatePath .= '.md';
+        }
+
+        $resolvedTargetPath = realpath($sourceDirectory.'/'.$candidatePath);
+
+        if ($resolvedTargetPath === false || ! str_ends_with($resolvedTargetPath, '.md')) {
+            return null;
+        }
+
+        $resolvedDocsParentReadme = realpath(dirname($resolvedDocsDirectory).'/README.md');
+
+        if ($resolvedDocsParentReadme !== false && $resolvedTargetPath === $resolvedDocsParentReadme) {
+            return '/'.$fragment;
+        }
+
+        $docsPrefix = rtrim($resolvedDocsDirectory, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
+
+        if (! str_starts_with($resolvedTargetPath, $docsPrefix)) {
+            return null;
+        }
+
+        $relativeTargetPath = substr($resolvedTargetPath, strlen($docsPrefix));
+        $page = preg_replace('/\.md$/', '', $relativeTargetPath);
+
+        if ($page === null || $page === '' || preg_match('/^[a-z0-9-]+$/', $page) !== 1) {
+            return null;
+        }
+
+        return "/docs/{$page}{$fragment}";
+    }
+
+    /**
+     * @return array{0: string, 1: string}
+     */
+    private function splitFragment(string $href): array
+    {
+        if (! str_contains($href, '#')) {
+            return [$href, ''];
+        }
+
+        [$path, $fragment] = explode('#', $href, 2);
+
+        return [$path, '#'.$fragment];
     }
 
     /**
