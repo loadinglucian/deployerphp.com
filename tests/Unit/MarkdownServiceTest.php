@@ -107,6 +107,23 @@ MARKDOWN;
         ->toContain('<li>Second item</li>');
 });
 
+it('renders note alerts with block content', function (): void {
+    $markdown = <<<'MARKDOWN'
+> [!NOTE]
+> First note callout.
+>
+> - First item
+> - Second item
+MARKDOWN;
+
+    $html = app(MarkdownService::class)->toHtml($markdown);
+
+    expect(substr_count($html, 'dark:border-l-cyan-400'))->toBe(1)
+        ->and($html)
+        ->toContain('<li>First item</li>')
+        ->toContain('<li>Second item</li>');
+});
+
 it('keeps empty github alert markers unchanged when there is no content', function (): void {
     $markdown = <<<'MARKDOWN'
 > [!IMPORTANT]

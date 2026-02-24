@@ -107,7 +107,7 @@ final readonly class MarkdownService
      * Convert GitHub-style alerts to styled callout boxes.
      *
      * Transforms blockquotes like:
-     *   > [!INFO]
+     *   > [!NOTE]
      *   > Content here
      *
      * Into styled alert boxes with icons using Blade component.
@@ -120,7 +120,7 @@ final readonly class MarkdownService
         //   ...optional additional block elements (e.g. <p>, <ul>, <pre>)...
         // </blockquote>
         return preg_replace_callback(
-            '/<blockquote>\s*<p>\s*\[!(INFO|IMPORTANT)\]\s*(.*?)<\/p>(.*?)<\/blockquote>/is',
+            '/<blockquote>\s*<p>\s*\[!(NOTE|IMPORTANT)\]\s*(.*?)<\/p>(.*?)<\/blockquote>/is',
             function (array $matches): string {
                 $type = strtolower(trim($matches[1]));
                 $firstParagraph = trim($matches[2]);
