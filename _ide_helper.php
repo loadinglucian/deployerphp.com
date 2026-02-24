@@ -24282,6 +24282,10 @@ namespace App\Livewire {
      */
     class DocsViewer extends \Livewire\Component {
             }
+    /**
+     */
+    class CommandIndex extends \Livewire\Component {
+            }
     }
 
 
