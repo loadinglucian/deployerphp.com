@@ -247,6 +247,144 @@ document.addEventListener('keydown', (event) => {
     openDocsImageLightbox(activeElement, { restoreFocus: true });
 });
 
+// ----
+// Scroll Spy - Right Sidebar Progress Highlighting
+// ----
+
+document.addEventListener('alpine:init', () => {
+    Alpine.data('docsScrollSpy', () => ({
+        activeIndex: -1,
+        headingIds: [],
+        observer: null,
+        scrollListener: null,
+
+        init() {
+            this.setup();
+
+            // Re-initialize after Livewire SPA navigation (new page content)
+            document.addEventListener('livewire:navigated', () => {
+                this.teardown();
+
+                this.$nextTick(() => this.setup());
+            });
+        },
+
+        setup() {
+            // Collect heading IDs from sidebar anchor links (Flux renders items as <a> tags directly)
+            const links = this.$root.querySelectorAll('[data-flux-navlist-item][href^="#"]');
+            this.headingIds = Array.from(links).map((link) => link.getAttribute('href').slice(1));
+
+            if (this.headingIds.length === 0) {
+                return;
+            }
+
+            // Track which headings have crossed into the top observation zone
+            const visible = new Set();
+
+            this.observer = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            visible.add(entry.target.id);
+                        } else {
+                            visible.delete(entry.target.id);
+                        }
+                    });
+
+                    this.updateActiveFromVisible(visible);
+                },
+                {
+                    // Top zone: below sticky header (~80px), observe top ~30% of viewport
+                    rootMargin: '-80px 0px -66% 0px',
+                },
+            );
+
+            this.headingIds.forEach((id) => {
+                const el = document.getElementById(id);
+                if (el) {
+                    this.observer.observe(el);
+                }
+            });
+
+            // Handle bottom-of-page: activate last heading when scrolled to end
+            this.scrollListener = () => {
+                const nearBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 40;
+
+                if (nearBottom && this.headingIds.length > 0) {
+                    this.activeIndex = this.headingIds.length - 1;
+                }
+            };
+            window.addEventListener('scroll', this.scrollListener, { passive: true });
+
+            // Set initial state for headings already in view
+            this.$nextTick(() => {
+                const initialVisible = new Set();
+
+                this.headingIds.forEach((id) => {
+                    const el = document.getElementById(id);
+                    if (!el) {
+                        return;
+                    }
+
+                    const rect = el.getBoundingClientRect();
+                    if (rect.top < window.innerHeight * 0.34) {
+                        initialVisible.add(id);
+                    }
+                });
+
+                this.updateActiveFromVisible(initialVisible);
+            });
+        },
+
+        updateActiveFromVisible(visible) {
+            // Find the last heading (by document order) that's in the observation zone
+            let lastVisibleIndex = -1;
+
+            for (let i = this.headingIds.length - 1; i >= 0; i--) {
+                if (visible.has(this.headingIds[i])) {
+                    lastVisibleIndex = i;
+                    break;
+                }
+            }
+
+            if (lastVisibleIndex !== -1) {
+                this.activeIndex = lastVisibleIndex;
+            } else if (visible.size === 0) {
+                // Nothing visible in zone — find the last heading above the viewport top
+                for (let i = this.headingIds.length - 1; i >= 0; i--) {
+                    const el = document.getElementById(this.headingIds[i]);
+                    if (el && el.getBoundingClientRect().top < 100) {
+                        this.activeIndex = i;
+                        return;
+                    }
+                }
+
+                // Scrolled to very top — no heading active
+                this.activeIndex = -1;
+            }
+        },
+
+        teardown() {
+            if (this.observer) {
+                this.observer.disconnect();
+                this.observer = null;
+            }
+
+            if (this.scrollListener) {
+                window.removeEventListener('scroll', this.scrollListener);
+                this.scrollListener = null;
+            }
+
+            this.activeIndex = -1;
+            this.headingIds = [];
+        },
+
+        destroy() {
+            this.teardown();
+        },
+    }));
+});
+
 // Use livewire:navigated for SPA compatibility (fires on initial load AND after navigation)
 document.addEventListener('livewire:navigated', () => {
     prepareDocsLightboxImages();

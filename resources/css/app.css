@@ -402,9 +402,14 @@
     padding-left: 1.5rem;
 }
 
-/* Active state: darker border + darker text */
-[data-flux-navlist] [data-flux-navlist-item][data-current],
-[data-flux-navlist] [data-flux-navlist-item][data-current='true'] {
+/* Passed state: headings the reader has scrolled past (progress indicator) */
+[data-flux-navlist] [data-flux-navlist-item][data-passed] {
+    border-left-color: #18181b; /* zinc-900 */
+    color: #52525b; /* zinc-600 - softer than current */
+}
+
+/* Current heading: full active treatment */
+[data-flux-navlist] [data-flux-navlist-item][data-current] {
     border-left-color: #18181b !important; /* zinc-900 */
     color: #18181b !important; /* zinc-900 */
     font-weight: 500 !important;
@@ -412,7 +417,7 @@
 }
 
 /* Hover state for inactive items */
-[data-flux-navlist] [data-flux-navlist-item]:not([data-current]):hover {
+[data-flux-navlist] [data-flux-navlist-item]:not([data-passed]):hover {
     color: #52525b; /* zinc-600 - gentle lift */
     border-left-color: #71717a; /* zinc-500 - more visible */
     background: transparent !important;
@@ -428,12 +433,17 @@
     color: #a1a1aa; /* zinc-400 - soft, inviting */
 }
 
+.dark [data-flux-navlist] [data-flux-navlist-item][data-passed] {
+    border-left-color: #fafafa; /* zinc-50 */
+    color: #a1a1aa; /* zinc-400 - softer than current */
+}
+
 .dark [data-flux-navlist] [data-flux-navlist-item][data-current] {
     border-left-color: #fafafa !important; /* zinc-50 */
     color: #fafafa !important; /* zinc-50 */
 }
 
-.dark [data-flux-navlist] [data-flux-navlist-item]:not([data-current]):hover {
+.dark [data-flux-navlist] [data-flux-navlist-item]:not([data-passed]):hover {
     border-left-color: #a1a1aa; /* zinc-400 - more visible */
     color: #fafafa; /* zinc-50 - gentle lift */
 }
