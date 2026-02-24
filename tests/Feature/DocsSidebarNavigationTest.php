@@ -39,6 +39,20 @@ it('renders a fixture docs page', function (): void {
         ->assertSeeText('Requirements');
 });
 
+it('converts relative markdown docs links to internal routes', function (): void {
+    app()->forgetInstance(DocsPathService::class);
+    app()->forgetInstance(TocParserService::class);
+    app()->forgetInstance(DocumentService::class);
+
+    $response = $this->get(route('docs.show', ['page' => 'documentation']));
+
+    $response->assertOk()
+        ->assertSee('href="'.route('home').'"', false)
+        ->assertSee('href="'.route('docs.show', ['page' => 'installation']).'"', false)
+        ->assertSee('href="'.route('docs.show', ['page' => 'link-behavior']).'"', false)
+        ->assertSee('href="https://github.com/loadinglucian/deployer-php/blob/main/docs/operations/runbooks.md" target="_blank" rel="noopener noreferrer"', false);
+});
+
 it('redirects missing docs pages to the docs home', function (): void {
     app()->forgetInstance(DocsPathService::class);
     app()->forgetInstance(TocParserService::class);

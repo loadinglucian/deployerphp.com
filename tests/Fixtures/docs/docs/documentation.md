@@ -1,6 +1,6 @@
 <a name="guides"></a>
 ## Guides
-- [Introduction](README.md)
+- [Introduction](../README.md)
 - [Installation](installation.md)
 - [Link Behavior](link-behavior.md)
 
