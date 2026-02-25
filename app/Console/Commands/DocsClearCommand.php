@@ -9,8 +9,10 @@ use Illuminate\Console\Command;
 
 final class DocsClearCommand extends Command
 {
+    #[\Override]
     protected $signature = 'docs:clear';
 
+    #[\Override]
     protected $description = 'Clear docs output files';
 
     public function handle(DocsOutputCacheService $docsOutput): int
