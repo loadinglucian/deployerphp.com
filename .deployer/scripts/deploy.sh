@@ -36,14 +36,19 @@ set -euo pipefail
 
 set_group_writable_tree() {
 	local path="$1"
+	local current_user
 
 	if [[ ! -d "${path}" ]]; then
 		return
 	fi
 
-	# Keep shared writable trees group-writable and SGID so new entries inherit group.
-	find "${path}" -type d -exec chmod 2775 {} +
-	find "${path}" -type f -exec chmod 664 {} +
+	current_user="$(id -un)"
+
+	# chmod can only be performed by file owner (or root). During runtime some
+	# cache files may be owned by www-data, so normalize only deployer-owned
+	# entries and do not fail deployment if skipped files exist.
+	find "${path}" -type d -user "${current_user}" -exec chmod 2775 {} + 2> /dev/null || true
+	find "${path}" -type f -user "${current_user}" -exec chmod 664 {} + 2> /dev/null || true
 }
 
 # ----
@@ -69,7 +74,6 @@ if [[ $framework == "laravel" ]]; then
 	echo "→ Ensuring shared storage directories..."
 	mkdir -p "${DEPLOYER_SHARED_PATH}/storage/"{app,framework,logs}
 	mkdir -p "${DEPLOYER_SHARED_PATH}/storage/framework/"{cache,sessions,views}
-    mkdir -p "${DEPLOYER_SHARED_PATH}/storage/framework/cache/docs-output/.locks"
 
 	# Make shared storage writable for both deploy user and PHP-FPM group member:
 	set_group_writable_tree "${DEPLOYER_SHARED_PATH}/storage"
@@ -164,7 +168,6 @@ if [[ $framework == "laravel" ]]; then
 	echo "→ Optimizing..."
 	"${DEPLOYER_PHP}" artisan optimize:clear
 	"${DEPLOYER_PHP}" artisan optimize
-    "${DEPLOYER_PHP}" artisan docs:clear
 
 	# Artisan commands can create new cache/session/log paths. Re-apply permissions
 	# to keep shared storage writable for both deploy user and PHP-FPM group member:
