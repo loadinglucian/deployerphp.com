@@ -2446,7 +2446,7 @@ namespace PHPSTORM_META {
         registerArgumentsSet('routes', 
 'boost.browser-logs','default-livewire.update',
 'livewire.upload-file','livewire.preview-file','home','docs.show','command-index',
-'storage.local',);
+'storage.local','storage.local.upload',);
         registerArgumentsSet('views', 
 '8c026b058f5337eae33f20fdb97d2c88::command-index','8c026b058f5337eae33f20fdb97d2c88::docs-viewer','command-index','components.docs.alert','components.docs.code-block',
 'components.docs.content','components.docs.footer','components.docs.header','components.docs.headings','components.docs.toc',
