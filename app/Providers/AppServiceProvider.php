@@ -26,13 +26,7 @@ final class AppServiceProvider extends ServiceProvider
         $this->app->singleton(TocParserService::class);
         $this->app->singleton(HeadingExtractorService::class);
         $this->app->singleton(DocumentService::class);
-    }
 
-    /**
-     * Bootstrap any application services.
-     */
-    public function boot(): void
-    {
         $this->optimizes(clear: 'docs:clear', key: 'docs');
     }
 }
