@@ -41,6 +41,7 @@ if [[ $framework == "laravel" ]]; then
 	echo "→ Ensuring shared storage directories..."
 	mkdir -p "${DEPLOYER_SHARED_PATH}/storage/"{app,framework,logs}
 	mkdir -p "${DEPLOYER_SHARED_PATH}/storage/framework/"{cache,sessions,views}
+	mkdir -p "${DEPLOYER_SHARED_PATH}/storage/framework/cache/docs-output/.locks"
 
 	echo "→ Linking shared storage..."
 	rm -rf "${DEPLOYER_RELEASE_PATH}/storage"
