@@ -5,11 +5,6 @@
             <span class="sr-only">GitHub</span>
         </a>
 
-        <a href="https://www.reddit.com/r/DeployerPHP/" target="_blank" rel="noopener" aria-label="Follow on Reddit" class="inline-flex items-center justify-center rounded-md p-2 text-zinc-500 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white">
-            <flux:icon.reddit class="size-5" />
-            <span class="sr-only">Reddit</span>
-        </a>
-
         <a href="https://x.com/loadinglucian" target="_blank" rel="noopener" aria-label="Follow on X" class="inline-flex items-center justify-center rounded-md p-2 text-zinc-500 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white">
             <flux:icon.x class="size-5" />
             <span class="sr-only">X</span>
