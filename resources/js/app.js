@@ -257,16 +257,18 @@ document.addEventListener('alpine:init', () => {
         headingIds: [],
         observer: null,
         scrollListener: null,
+        navigatedListener: null,
 
         init() {
             this.setup();
 
             // Re-initialize after Livewire SPA navigation (new page content)
-            document.addEventListener('livewire:navigated', () => {
+            this.navigatedListener = () => {
                 this.teardown();
 
                 this.$nextTick(() => this.setup());
-            });
+            };
+            document.addEventListener('livewire:navigated', this.navigatedListener);
         },
 
         setup() {
@@ -380,6 +382,11 @@ document.addEventListener('alpine:init', () => {
         },
 
         destroy() {
+            if (this.navigatedListener) {
+                document.removeEventListener('livewire:navigated', this.navigatedListener);
+                this.navigatedListener = null;
+            }
+
             this.teardown();
         },
     }));
