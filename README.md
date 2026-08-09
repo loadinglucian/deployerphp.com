@@ -1,59 +1,44 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
-
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+    <a href="https://github.com/loadinglucian/deployer-php" target="_blank">
+        <img src="https://raw.githubusercontent.com/loadinglucian/deployer-php/main/docs/images/logo-mark.svg" width="400" alt="DeployerPHP Logo">
+    </a>
 </p>
 
-## About Laravel
+# DeployerPHP Documentation Site
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+This is the documentation site for [DeployerPHP](https://github.com/loadinglucian/deployer-php), a complete set of CLI tools for provisioning, installing, and deploying servers and sites using PHP.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+It is a Laravel + Livewire application that renders the DeployerPHP documentation as a beautiful, browsable website. The documentation content itself is not stored in this repository — it is read at runtime from the `docs` folder of the `loadinglucian/deployer-php` Composer dependency.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+> [!NOTE]
+> This site is no longer hosted online. Clone this repository and run it locally to browse the documentation as a website. Alternatively, you can read the markdown files directly in the [deployer-php docs folder](https://github.com/loadinglucian/deployer-php/tree/main/docs).
 
-## Learning Laravel
+## Requirements
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+- PHP 8.5+ and Composer
+- Node.js and npm (for building assets)
+- A [Flux Pro](https://fluxui.dev) license — the UI depends on `livewire/flux-pro`, which requires Composer credentials for `composer.fluxui.dev` (see the [Flux installation docs](https://fluxui.dev/docs/installation))
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Running Locally
 
-## Laravel Sponsors
+```shell
+git clone https://github.com/loadinglucian/deployerphp.com.git
+cd deployerphp.com
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+# Install dependencies, create .env, generate app key,
+# run migrations, and build frontend assets
+composer run setup
 
-### Premium Partners
+# Start the local dev servers (app, queue, logs, vite)
+composer run dev
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Then open <http://localhost:8000> to browse the documentation. A command reference is available at <http://localhost:8000/command-index>.
 
-## Contributing
+## Previewing Local Documentation Changes
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+By default, the site renders the documentation shipped with the `loadinglucian/deployer-php` Composer package (`vendor/loadinglucian/deployer-php/docs`). To preview documentation changes from a local checkout instead, point `DOCS_PATH` at it in your `.env`:
 
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```dotenv
+DOCS_PATH=/path/to/deployer-php/docs
+```
